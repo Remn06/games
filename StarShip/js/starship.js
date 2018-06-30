@@ -74,11 +74,7 @@ var GameEngine = (function () {
         this.gameArea.empty();
         this.isStarted = true;
         this.gameObjects = [];
-        var s = new StarShip();
-        s.left = 100;
-        s.top = 100;
-        // s.checkCollision = false;
-        this.addGameObject(s);
+        this.createStarShip();
         this.createAsteroids(5);
         this.startTimer();
     };
@@ -140,9 +136,18 @@ var GameEngine = (function () {
             var asteroid = new Asteroid();
             asteroid.checkCollision = false;
             asteroid.speed = this.getRandom(1, 3);
+            asteroid.width = 25;
+            asteroid.height = 25;
             this.calcAsteroidPos(asteroid);
             GameManager.instance().addGameObject(asteroid);
         }
+    };
+    GameEngine.prototype.createStarShip = function () {
+        var s = new StarShip();
+        s.left = this.gameArea.width() / 2 - s.width / 2;
+        s.top = this.gameArea.height() / 2 - s.height / 2;
+        s.checkCollision = false;
+        this.addGameObject(s);
     };
     GameEngine.prototype.calcAsteroidPos = function (asteroid) {
         var gameAreaWidth = this.gameArea.width();
@@ -351,6 +356,7 @@ var GameObject = (function () {
         this.width = 100;
         this.height = 100;
         this.checkCollision = true;
+        this.drawTransparentCollision = true;
         this.gameArea = $('#gameArea');
         this.element = null;
     }
@@ -361,6 +367,12 @@ var GameObject = (function () {
     ;
     GameObject.prototype.draw = function () {
         this.element.css({ 'left': this.left + 'px', 'top': this.top + 'px' });
+        if (this.checkCollision === false && this.drawTransparentCollision === true) {
+            this.element.addClass('halfTransparent');
+        }
+        else {
+            this.element.removeClass('halfTransparent');
+        }
     };
     ;
     GameObject.prototype.update = function () {
@@ -414,6 +426,7 @@ var AnimatedObject = (function (_super) {
         _this.animationFinished = animationFinished;
         _this.slide = 0;
         _this.counter = 0;
+        _this.drawTransparentCollision = false;
         return _this;
     }
     AnimatedObject.prototype.start = function () {
@@ -593,12 +606,6 @@ var Asteroid = (function (_super) {
     };
     Asteroid.prototype.draw = function () {
         _super.prototype.draw.call(this);
-        if (this.checkCollision === true) {
-            this.element.removeClass('halfTransparent');
-        }
-        else {
-            this.element.addClass('halfTransparent');
-        }
     };
     return Asteroid;
 }(MovingObject));

@@ -77,11 +77,6 @@ class Asteroid extends MovingObject {
 
     draw() {
         super.draw();
-        if(this.checkCollision === true) {
-            this.element.removeClass('halfTransparent');
-        } else {
-            this.element.addClass('halfTransparent');
-        }
     }
 
 }

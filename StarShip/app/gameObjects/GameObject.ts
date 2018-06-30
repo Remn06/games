@@ -4,6 +4,7 @@ class GameObject {
     width: number = 100;
     height: number = 100;
     checkCollision: boolean = true;
+    drawTransparentCollision = true;
 
     protected gameArea: JQuery = $('#gameArea');
     protected element: JQuery = null;
@@ -19,6 +20,11 @@ class GameObject {
 
     draw() {
         this.element.css({'left': this.left + 'px', 'top': this.top + 'px'});
+        if(this.checkCollision === false && this.drawTransparentCollision === true) {
+            this.element.addClass('halfTransparent');
+        } else {
+            this.element.removeClass('halfTransparent');
+        }
     };
 
     update() {

@@ -57,7 +57,7 @@
     width: 100px;
     height: 100px;
     transform: rotate(0);
-    background-image: url("../img/asteroid-icon.png");
+    background-image: url("../img/asteroid-icon-v2.png");
     background-size: cover;
     /*border: 1px solid red;*/
 }

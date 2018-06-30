@@ -21,14 +21,8 @@ class GameEngine {
         this.isStarted = true;
         this.gameObjects = [];
 
-        let s = new StarShip();
-        s.left = 100;
-        s.top = 100;
-        // s.checkCollision = false;
-        this.addGameObject(s);
-
+        this.createStarShip();
         this.createAsteroids(5);
-
         this.startTimer();
     }
 
@@ -104,9 +98,19 @@ class GameEngine {
             let asteroid = new Asteroid();
             asteroid.checkCollision = false;
             asteroid.speed = this.getRandom(1, 3);
+            asteroid.width = 25;
+            asteroid.height = 25;
             this.calcAsteroidPos(asteroid);
             GameManager.instance().addGameObject(asteroid);
         }
+    }
+
+    createStarShip(): void {
+        let s = new StarShip();
+        s.left = this.gameArea.width() / 2 - s.width / 2 ;
+        s.top = this.gameArea.height() / 2 - s.height / 2;
+        s.checkCollision = false;
+        this.addGameObject(s);
     }
 
     calcAsteroidPos(asteroid: Asteroid): void{
