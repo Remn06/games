@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "none",
+    "target": "es5",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "outFile": "js/starship.js"
+
+  },
+  "include": [
+    "./app/**/*"
+  ]
+}

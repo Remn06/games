@@ -1,0 +1,67 @@
+.background {
+    background-color: RGBA( 0, 0, 0, 1);/*#ff0000;*/
+}
+
+.gameMenuBlock {
+    position: relative;
+    width: 150px;
+    height: 50px;
+    margin: 120px auto;
+    z-index: 2;
+}
+
+.gameMenuButton {
+    width: 150px;
+    height: 50px;
+    background-color: green;
+    color: white;
+}
+
+.gameArea {
+    border: 1px solid red;
+    width: 400px;
+    height: 400px;
+    min-width: 400px;
+    min-height: 400px;
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    z-index: 1;
+    background-image: url("../img/space.jpg");
+    overflow: hidden;
+
+}
+
+.starShip {
+    position: absolute;
+    /*left: 10px;
+    top: 10px;*/
+    width: 100px;
+    height: 100px;
+    background-image: url("../img/cruiser.png");
+    transform: rotate(0);
+    /*border: 1px solid red;*/
+}
+
+.bullet {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-image: url("../img/bullet.png");
+    transform: rotate(0);
+    /*border: 1px solid red;*/
+}
+
+.asteroid {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    transform: rotate(0);
+    background-image: url("../img/asteroid-icon.png");
+    background-size: cover;
+    /*border: 1px solid red;*/
+}
+
+.halfTransparent {
+    opacity: 0.2;
+}
