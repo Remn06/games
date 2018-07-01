@@ -4,6 +4,8 @@ class StarShip extends MovingObject {
 
     constructor(){
         super();
+        this.width = 25; // todo check why it isn't working
+        this.height = 25;
     }
 
     start() {

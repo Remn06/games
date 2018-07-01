@@ -22,7 +22,7 @@ class GameEngine {
         this.gameObjects = [];
 
         this.createStarShip();
-        this.createAsteroids(5);
+        this.createAsteroids(50);
         this.startTimer();
     }
 
@@ -95,11 +95,9 @@ class GameEngine {
 
     createAsteroids(amount: number) {
         for(let i = 0; i < amount; i++) {
-            let asteroid = new Asteroid();
+            let asteroid = new Asteroid()
             asteroid.checkCollision = false;
             asteroid.speed = this.getRandom(1, 3);
-            asteroid.width = 25;
-            asteroid.height = 25;
             this.calcAsteroidPos(asteroid);
             GameManager.instance().addGameObject(asteroid);
         }
@@ -209,6 +207,8 @@ class GameEngine {
             aObj.left = result[i].left;
             aObj.top = result[i].top;
             aObj.checkCollision = false;
+            aObj.width = 25;
+            aObj.height = 25;
             this.addGameObject(aObj);
         }
 

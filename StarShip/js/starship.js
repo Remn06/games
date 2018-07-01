@@ -75,7 +75,7 @@ var GameEngine = (function () {
         this.isStarted = true;
         this.gameObjects = [];
         this.createStarShip();
-        this.createAsteroids(5);
+        this.createAsteroids(50);
         this.startTimer();
     };
     GameEngine.prototype.addGameObject = function (gameObject) {
@@ -136,8 +136,6 @@ var GameEngine = (function () {
             var asteroid = new Asteroid();
             asteroid.checkCollision = false;
             asteroid.speed = this.getRandom(1, 3);
-            asteroid.width = 25;
-            asteroid.height = 25;
             this.calcAsteroidPos(asteroid);
             GameManager.instance().addGameObject(asteroid);
         }
@@ -242,6 +240,8 @@ var GameEngine = (function () {
             aObj.left = result[i].left;
             aObj.top = result[i].top;
             aObj.checkCollision = false;
+            aObj.width = 25;
+            aObj.height = 25;
             this_1.addGameObject(aObj);
         };
         var this_1 = this;
@@ -363,10 +363,17 @@ var GameObject = (function () {
     GameObject.prototype.start = function () {
         this.element = $('<div></div>');
         this.gameArea.append(this.element);
+        this.element.css({
+            'width': this.width + 'px',
+            'height': this.height + 'px'
+        });
     };
     ;
     GameObject.prototype.draw = function () {
-        this.element.css({ 'left': this.left + 'px', 'top': this.top + 'px' });
+        this.element.css({
+            'left': this.left + 'px',
+            'top': this.top + 'px'
+        });
         if (this.checkCollision === false && this.drawTransparentCollision === true) {
             this.element.addClass('halfTransparent');
         }
@@ -426,6 +433,8 @@ var AnimatedObject = (function (_super) {
         _this.animationFinished = animationFinished;
         _this.slide = 0;
         _this.counter = 0;
+        _this.xScale = 1;
+        _this.yScale = 1;
         _this.drawTransparentCollision = false;
         return _this;
     }
@@ -433,22 +442,22 @@ var AnimatedObject = (function (_super) {
         _super.prototype.start.call(this);
         this.element.css({ 'background-image': 'url("' + this.pathToTexture + '")' });
         this.element.css({ 'position': 'absolute' });
-        // this.element.css({'background-repeat': 'no-repeat'});
-        // this.element.css({'background-attachment': 'fixed'});
+        this.xScale = this.slideWidth / this.width;
+        this.yScale = this.slideHeight / this.height;
+        var backgroundXSize = ((this.slideWidth * this.slidesInARow) / this.xScale);
+        var backgroundYSize = ((Math.ceil(this.slidesCount / this.slidesInARow) * this.slideHeight) / this.yScale);
+        this.element.css({ 'background-size': backgroundXSize + 'px ' + backgroundYSize + 'px' });
     };
     AnimatedObject.prototype.draw = function () {
         _super.prototype.draw.call(this);
-        this.element.css({ 'width': this.slideWidth + 'px', 'height': this.slideHeight + 'px' });
-        var y = Math.floor(this.slide / this.slidesInARow); // (this.slide * this.slideWidth)
+        var y = Math.floor(this.slide / this.slidesInARow);
         var x = this.slide - (y * this.slidesInARow) - 1;
-        var backPos = '-' + (x * this.slideWidth) + 'px -' + (y * this.slideHeight) + 'px';
+        var xShift = (x * (this.slideWidth / this.xScale));
+        var yShift = (y * (this.slideHeight / this.yScale));
+        var backPos = '-' + xShift + 'px -' + yShift + 'px';
         this.element.css({ 'background-position': backPos });
     };
     AnimatedObject.prototype.update = function () {
-        /*      this.counter++;
-              if(this.counter > 2) {
-                  this.counter = 0;
-      */
         this.slide++;
         if (this.slide >= this.slidesCount) {
             if (this.animationFinished != null) {
@@ -456,8 +465,6 @@ var AnimatedObject = (function (_super) {
             }
             this.slide = 0;
         }
-        /*
-                }*/
         _super.prototype.update.call(this);
     };
     return AnimatedObject;
@@ -530,8 +537,8 @@ var Asteroid = (function (_super) {
     __extends(Asteroid, _super);
     function Asteroid() {
         var _this = _super.call(this) || this;
-        _this.width = 100;
-        _this.height = 100;
+        _this.width = 25;
+        _this.height = 25;
         return _this;
     }
     Asteroid.prototype.start = function () {
@@ -636,7 +643,10 @@ var Bullet = (function (_super) {
 var StarShip = (function (_super) {
     __extends(StarShip, _super);
     function StarShip() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.width = 25; // todo check why it isn't working
+        _this.height = 25;
+        return _this;
     }
     StarShip.prototype.start = function () {
         _super.prototype.start.call(this);

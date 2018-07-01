@@ -4,8 +4,8 @@ class Asteroid extends MovingObject {
     constructor () {
         super();
 
-        this.width = 100;
-        this.height = 100;
+        this.width = 25;
+        this.height = 25;
     }
 
     start() {
