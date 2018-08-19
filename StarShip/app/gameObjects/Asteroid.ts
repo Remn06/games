@@ -79,8 +79,5 @@ class Asteroid extends MovingObject {
         super.draw();
     }
 
-    f2() {
-
-    }
 }
 

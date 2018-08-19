@@ -1,5 +1,6 @@
-/// <reference path="GameObject.ts" />
-class MovingObject extends GameObject {
+/// <reference path="IntersectObject.ts" />
+
+class MovingObject extends IntersectObject {
 
     speed: number = 0;
     direction: MovingObjectDirection = MovingObjectDirection.east;

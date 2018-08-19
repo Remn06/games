@@ -78,6 +78,7 @@ var GameEngine = (function () {
         this.score = 0;
         this.createStarShip();
         this.createAsteroids(5);
+        this.createScoreIndicator();
         this.startTimer();
     };
     GameEngine.prototype.addGameObject = function (gameObject) {
@@ -148,6 +149,12 @@ var GameEngine = (function () {
         s.top = this.gameArea.height() / 2 - s.height / 2;
         s.checkCollision = false;
         this.addGameObject(s);
+    };
+    GameEngine.prototype.createScoreIndicator = function () {
+        var scoreIndicator = new ScoreIndicator();
+        scoreIndicator.left = 10;
+        scoreIndicator.top = 10;
+        this.addGameObject(scoreIndicator);
     };
     GameEngine.prototype.calcAsteroidPos = function (asteroid) {
         var gameAreaWidth = this.gameArea.width();
@@ -220,18 +227,24 @@ var GameEngine = (function () {
     };
     GameEngine.prototype.checkCollisions = function () {
         var _this = this;
-        var result = [];
+        var intersectObjects = [];
         for (var i = 0; i < this.gameObjects.length; i++) {
-            var gameObj = this.gameObjects[i];
-            for (var t = i + 1; t < this.gameObjects.length; t++) {
-                var gameObj1 = this.gameObjects[t];
-                if (gameObj.checkCollision === false || gameObj1.checkCollision === false) {
+            if (this.gameObjects[i] instanceof IntersectObject) {
+                intersectObjects.push(this.gameObjects[i]);
+            }
+        }
+        var result = [];
+        for (var i = 0; i < intersectObjects.length; i++) {
+            var intersectObject = intersectObjects[i];
+            for (var t = i + 1; t < intersectObjects.length; t++) {
+                var intersectObject1 = intersectObjects[t];
+                if (intersectObject.checkCollision === false || intersectObject1.checkCollision === false) {
                     continue;
                 }
-                if (gameObj.intersects(gameObj1) || gameObj1.intersects(gameObj)) {
-                    result.push(gameObj1);
-                    result.push(gameObj);
-                    this.objectsCollide(gameObj, gameObj1);
+                if (intersectObject.intersects(intersectObject1) || intersectObject1.intersects(intersectObject)) {
+                    result.push(intersectObject1);
+                    result.push(intersectObject);
+                    this.objectsCollide(intersectObject, intersectObject1);
                 }
             }
         }
@@ -242,7 +255,6 @@ var GameEngine = (function () {
             });
             animatedObject.left = result[i].left;
             animatedObject.top = result[i].top;
-            animatedObject.checkCollision = false;
             animatedObject.width = 25;
             animatedObject.height = 25;
             this_1.addGameObject(animatedObject);
@@ -258,7 +270,6 @@ var GameEngine = (function () {
         var haveBullet = (gameObj instanceof Bullet) || (gameObj1 instanceof Bullet);
         if (haveAsteroid === true && haveBullet === true) {
             this.score = this.score + 10;
-            console.log(this.score);
         }
     };
     GameEngine.prototype.isInsideGameArea = function (gameObject) {
@@ -270,6 +281,9 @@ var GameEngine = (function () {
             gameObject.top > 0 && gameObject.top < gameAreaHeight &&
             goRight > 0 && goRight < gameAreaWidth &&
             goBottom > 0 && goBottom < gameAreaHeight);
+    };
+    GameEngine.prototype.getScore = function () {
+        return this.score;
     };
     GameEngine.prototype.restoreAsteroidsAmount = function (removedObjects) {
         if (removedObjects.length === 0) {
@@ -329,6 +343,9 @@ var GameManager = (function () {
     GameManager.prototype.isInsideGameArea = function (gameObject) {
         return this.gameEngine.isInsideGameArea(gameObject);
     };
+    GameManager.prototype.getScore = function () {
+        return this.gameEngine.getScore();
+    };
     return GameManager;
 }());
 GameManager.gameManagerInstance = null;
@@ -376,8 +393,6 @@ var GameObject = (function () {
         this.top = 0;
         this.width = 100;
         this.height = 100;
-        this.checkCollision = true;
-        this.drawTransparentCollision = true;
         this.gameArea = $('#gameArea');
         this.element = null;
     }
@@ -396,12 +411,6 @@ var GameObject = (function () {
             'left': this.left + 'px',
             'top': this.top + 'px'
         });
-        if (this.checkCollision === false && this.drawTransparentCollision === true) {
-            this.element.addClass('halfTransparent');
-        }
-        else {
-            this.element.removeClass('halfTransparent');
-        }
     };
     ;
     GameObject.prototype.update = function () {
@@ -410,24 +419,6 @@ var GameObject = (function () {
         this.element.remove();
     };
     ;
-    GameObject.prototype.intersects = function (gameObject) {
-        if ((gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
-            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)) {
-            return true;
-        }
-        if ((gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
-            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)) {
-            return true;
-        }
-        if ((gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
-            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)) {
-            return true;
-        }
-        if ((gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
-            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)) {
-            return true;
-        }
-    };
     return GameObject;
 }());
 /// <reference path="GameObject.ts" />
@@ -457,7 +448,6 @@ var AnimatedObject = (function (_super) {
         _this.counter = 0;
         _this.xScale = 1;
         _this.yScale = 1;
-        _this.drawTransparentCollision = false;
         return _this;
     }
     AnimatedObject.prototype.start = function () {
@@ -491,7 +481,45 @@ var AnimatedObject = (function (_super) {
     };
     return AnimatedObject;
 }(GameObject));
-/// <reference path="GameObject.ts" />
+var IntersectObject = (function (_super) {
+    __extends(IntersectObject, _super);
+    function IntersectObject() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.checkCollision = true;
+        _this.drawTransparentCollision = true;
+        return _this;
+    }
+    IntersectObject.prototype.draw = function () {
+        _super.prototype.draw.call(this);
+        if (this.checkCollision === false && this.drawTransparentCollision === true) {
+            this.element.addClass('halfTransparent');
+        }
+        else {
+            this.element.removeClass('halfTransparent');
+        }
+    };
+    ;
+    IntersectObject.prototype.intersects = function (gameObject) {
+        if ((gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
+            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)) {
+            return true;
+        }
+        if ((gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
+            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)) {
+            return true;
+        }
+        if ((gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
+            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)) {
+            return true;
+        }
+        if ((gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
+            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)) {
+            return true;
+        }
+    };
+    return IntersectObject;
+}(GameObject));
+/// <reference path="IntersectObject.ts" />
 var MovingObject = (function (_super) {
     __extends(MovingObject, _super);
     function MovingObject() {
@@ -553,7 +581,7 @@ var MovingObject = (function (_super) {
     };
     ;
     return MovingObject;
-}(GameObject));
+}(IntersectObject));
 /// <reference path="MovingObject.ts" />
 var Asteroid = (function (_super) {
     __extends(Asteroid, _super);
@@ -635,8 +663,6 @@ var Asteroid = (function (_super) {
     };
     Asteroid.prototype.draw = function () {
         _super.prototype.draw.call(this);
-    };
-    Asteroid.prototype.f2 = function () {
     };
     return Asteroid;
 }(MovingObject));
@@ -796,4 +822,25 @@ var StarShip = (function (_super) {
     };
     return StarShip;
 }(MovingObject));
+var ScoreIndicator = (function (_super) {
+    __extends(ScoreIndicator, _super);
+    function ScoreIndicator() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.score = null;
+        return _this;
+    }
+    ScoreIndicator.prototype.start = function () {
+        _super.prototype.start.call(this);
+        this.element.addClass('scoreIndicator');
+    };
+    ScoreIndicator.prototype.draw = function () {
+        _super.prototype.draw.call(this);
+        this.element.text(this.score.toString());
+    };
+    ScoreIndicator.prototype.update = function () {
+        _super.prototype.update.call(this);
+        this.score = GameManager.instance().getScore();
+    };
+    return ScoreIndicator;
+}(GameObject));
 //# sourceMappingURL=starship.js.map

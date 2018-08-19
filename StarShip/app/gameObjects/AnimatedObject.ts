@@ -11,7 +11,6 @@ class AnimatedObject extends GameObject {
                  protected slidesCount: number, protected slidesInARow: number, protected animationSpeed: number,
                  protected repeat: boolean, private animationFinished: Function) {
         super();
-        this.drawTransparentCollision = false;
     }
 
     start() {

@@ -4,8 +4,7 @@ class GameEngine {
     isStarted: boolean = false;
     timerHandle: any = null;
     gameArea = $('#gameArea');
-    score: number = null;
-
+    private score: number = null;
 
     constructor() {
         let self = this;
@@ -27,6 +26,7 @@ class GameEngine {
 
         this.createStarShip();
         this.createAsteroids(5);
+        this.createScoreIndicator();
         this.startTimer();
     }
 
@@ -115,6 +115,13 @@ class GameEngine {
         this.addGameObject(s);
     }
 
+    private createScoreIndicator(): void {
+        let scoreIndicator = new ScoreIndicator();
+        scoreIndicator.left = 10;
+        scoreIndicator.top = 10;
+        this.addGameObject(scoreIndicator);
+    }
+
     calcAsteroidPos(asteroid: Asteroid): void{
         let gameAreaWidth = this.gameArea.width();
         let gameAreaHeight = this.gameArea.height();
@@ -187,18 +194,25 @@ class GameEngine {
     }
 
     checkCollisions(): void {
+        let intersectObjects: IntersectObject[] = [];
+        for(let i = 0; i < this.gameObjects.length; i++){
+            if(this.gameObjects[i] instanceof IntersectObject){
+                intersectObjects.push(this.gameObjects[i] as IntersectObject);
+            }
+        }
+
         let result: GameObject[] = [];
-        for(let i = 0; i < this.gameObjects.length; i++) {
-            let gameObj = this.gameObjects[i];
-            for(let t = i + 1; t < this.gameObjects.length; t++) {
-                let gameObj1 = this.gameObjects[t];
-                if(gameObj.checkCollision === false || gameObj1.checkCollision === false) {
+        for(let i = 0; i < intersectObjects.length; i++) {
+            let intersectObject = intersectObjects[i];
+            for(let t = i + 1; t < intersectObjects.length; t++) {
+                let intersectObject1 = intersectObjects[t];
+                if(intersectObject.checkCollision === false || intersectObject1.checkCollision === false) {
                     continue;
                 }
-                if( gameObj.intersects(gameObj1) || gameObj1.intersects(gameObj) ) {
-                    result.push(gameObj1);
-                    result.push(gameObj);
-                    this.objectsCollide(gameObj, gameObj1);
+                if( intersectObject.intersects(intersectObject1) || intersectObject1.intersects(intersectObject) ) {
+                    result.push(intersectObject1);
+                    result.push(intersectObject);
+                    this.objectsCollide(intersectObject, intersectObject1);
                 }
             }
         }
@@ -211,7 +225,6 @@ class GameEngine {
             });
             animatedObject.left = result[i].left;
             animatedObject.top = result[i].top;
-            animatedObject.checkCollision = false;
             animatedObject.width = 25;
             animatedObject.height = 25;
             this.addGameObject(animatedObject);
@@ -225,7 +238,6 @@ class GameEngine {
         let haveBullet = (gameObj instanceof Bullet) || (gameObj1 instanceof Bullet);
         if(haveAsteroid === true && haveBullet === true) {
             this.score = this.score + 10;
-            console.log(this.score);
         }
     }
 
@@ -241,6 +253,10 @@ class GameEngine {
             goRight > 0 && goRight < gameAreaWidth &&
             goBottom > 0 && goBottom < gameAreaHeight
            )
+    }
+
+    public getScore(): number {
+        return this.score;
     }
 
     private restoreAsteroidsAmount(removedObjects: GameObject[]): void {

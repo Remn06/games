@@ -53,6 +53,10 @@ class GameManager {
         return this.gameEngine.isInsideGameArea(gameObject);
     }
 
+    public getScore() {
+        return this.gameEngine.getScore();
+    }
+
 }
 
 
