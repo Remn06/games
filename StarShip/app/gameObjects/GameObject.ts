@@ -16,6 +16,7 @@ class GameObject {
     start() {
         this.element = $('<div></div>');
         this.gameArea.append(this.element);
+        this.element.addClass('gameObject');
         this.element.css({
             'width': this.width + 'px',
             'height': this.height + 'px'

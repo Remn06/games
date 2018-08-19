@@ -4,6 +4,8 @@ class GameEngine {
     isStarted: boolean = false;
     timerHandle: any = null;
     gameArea = $('#gameArea');
+    score: number = null;
+
 
     constructor() {
         let self = this;
@@ -21,8 +23,10 @@ class GameEngine {
         this.isStarted = true;
         this.gameObjects = [];
 
+        this.score = 0;
+
         this.createStarShip();
-        this.createAsteroids(50);
+        this.createAsteroids(5);
         this.startTimer();
     }
 
@@ -95,7 +99,7 @@ class GameEngine {
 
     createAsteroids(amount: number) {
         for(let i = 0; i < amount; i++) {
-            let asteroid = new Asteroid()
+            let asteroid = new Asteroid();
             asteroid.checkCollision = false;
             asteroid.speed = this.getRandom(1, 3);
             this.calcAsteroidPos(asteroid);
@@ -105,7 +109,7 @@ class GameEngine {
 
     createStarShip(): void {
         let s = new StarShip();
-        s.left = this.gameArea.width() / 2 - s.width / 2 ;
+        s.left = this.gameArea.width() / 2 - s.width / 2;
         s.top = this.gameArea.height() / 2 - s.height / 2;
         s.checkCollision = false;
         this.addGameObject(s);
@@ -185,15 +189,16 @@ class GameEngine {
     checkCollisions(): void {
         let result: GameObject[] = [];
         for(let i = 0; i < this.gameObjects.length; i++) {
-            let gObj = this.gameObjects[i];
+            let gameObj = this.gameObjects[i];
             for(let t = i + 1; t < this.gameObjects.length; t++) {
-                let gObj1 = this.gameObjects[t];
-                if(gObj.checkCollision === false || gObj1.checkCollision === false) {
+                let gameObj1 = this.gameObjects[t];
+                if(gameObj.checkCollision === false || gameObj1.checkCollision === false) {
                     continue;
                 }
-                if( gObj.intersects(gObj1) || gObj1.intersects(gObj) ) {
-                    result.push(gObj1);
-                    result.push(gObj);
+                if( gameObj.intersects(gameObj1) || gameObj1.intersects(gameObj) ) {
+                    result.push(gameObj1);
+                    result.push(gameObj);
+                    this.objectsCollide(gameObj, gameObj1);
                 }
             }
         }
@@ -201,19 +206,26 @@ class GameEngine {
         for(let i = 0; i < result.length; i++){
             GameManager.instance().removeGameObject(result[i]);
 
-            let aObj = new AnimatedObject('./img/explosion-sprite.png', 100, 100, 74, 9, 1000, true, () => {
-                this.removeGameObject(aObj);
+            let animatedObject = new AnimatedObject('./img/explosion-sprite.png', 100, 100, 74, 9, 1000, true, () => {
+                this.removeGameObject(animatedObject);
             });
-            aObj.left = result[i].left;
-            aObj.top = result[i].top;
-            aObj.checkCollision = false;
-            aObj.width = 25;
-            aObj.height = 25;
-            this.addGameObject(aObj);
+            animatedObject.left = result[i].left;
+            animatedObject.top = result[i].top;
+            animatedObject.checkCollision = false;
+            animatedObject.width = 25;
+            animatedObject.height = 25;
+            this.addGameObject(animatedObject);
         }
 
-        if(result.length > 0) { // todo change to create such amount of asteroids that were removed
-           this.createAsteroids(2);
+        this.restoreAsteroidsAmount(result);
+    }
+
+    public objectsCollide(gameObj: GameObject, gameObj1: GameObject) {
+        let haveAsteroid = (gameObj instanceof Asteroid) || (gameObj1 instanceof Asteroid);
+        let haveBullet = (gameObj instanceof Bullet) || (gameObj1 instanceof Bullet);
+        if(haveAsteroid === true && haveBullet === true) {
+            this.score = this.score + 10;
+            console.log(this.score);
         }
     }
 
@@ -230,5 +242,21 @@ class GameEngine {
             goBottom > 0 && goBottom < gameAreaHeight
            )
     }
-}
 
+    private restoreAsteroidsAmount(removedObjects: GameObject[]): void {
+        if(removedObjects.length === 0) {
+            return;
+        }
+
+        let amountOfAsteroids = 0;
+
+        for(let i = 0; i < removedObjects.length; i++){
+            if(removedObjects[i] instanceof Asteroid) {
+                amountOfAsteroids++;
+            }
+
+        }
+
+        this.createAsteroids(amountOfAsteroids);
+    }
+}

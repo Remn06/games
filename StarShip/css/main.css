@@ -30,28 +30,24 @@
 
 }
 
-.starShip {
+.gameObject {
     position: absolute;
-    background-image: url("../img/cruiser.png");
+    background-size: cover;
     transform: rotate(0);
-    /*border: 1px solid red;*/
+}
+
+.starShip {
+    background-image: url("../img/cruiser.png");
 }
 
 .bullet {
-    position: absolute;
     background-image: url("../img/bullet.png");
-    transform: rotate(0);
-    /*border: 1px solid red;*/
 }
 
 .asteroid {
-    position: absolute;
-    transform: rotate(0);
     background-image: url("../img/asteroid-icon-v2.png");
-    background-size: cover;
-    /*border: 1px solid red;*/
 }
 
 .halfTransparent {
-    opacity: 0.2;
+    opacity: 0.5;
 }

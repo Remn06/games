@@ -64,6 +64,7 @@ var GameEngine = (function () {
         this.isStarted = false;
         this.timerHandle = null;
         this.gameArea = $('#gameArea');
+        this.score = null;
         var self = this;
         $(window).resize(function () {
             self.onWindowResize();
@@ -74,8 +75,9 @@ var GameEngine = (function () {
         this.gameArea.empty();
         this.isStarted = true;
         this.gameObjects = [];
+        this.score = 0;
         this.createStarShip();
-        this.createAsteroids(50);
+        this.createAsteroids(5);
         this.startTimer();
     };
     GameEngine.prototype.addGameObject = function (gameObject) {
@@ -220,36 +222,43 @@ var GameEngine = (function () {
         var _this = this;
         var result = [];
         for (var i = 0; i < this.gameObjects.length; i++) {
-            var gObj = this.gameObjects[i];
+            var gameObj = this.gameObjects[i];
             for (var t = i + 1; t < this.gameObjects.length; t++) {
-                var gObj1 = this.gameObjects[t];
-                if (gObj.checkCollision === false || gObj1.checkCollision === false) {
+                var gameObj1 = this.gameObjects[t];
+                if (gameObj.checkCollision === false || gameObj1.checkCollision === false) {
                     continue;
                 }
-                if (gObj.intersects(gObj1) || gObj1.intersects(gObj)) {
-                    result.push(gObj1);
-                    result.push(gObj);
+                if (gameObj.intersects(gameObj1) || gameObj1.intersects(gameObj)) {
+                    result.push(gameObj1);
+                    result.push(gameObj);
+                    this.objectsCollide(gameObj, gameObj1);
                 }
             }
         }
         var _loop_1 = function (i) {
             GameManager.instance().removeGameObject(result[i]);
-            var aObj = new AnimatedObject('./img/explosion-sprite.png', 100, 100, 74, 9, 1000, true, function () {
-                _this.removeGameObject(aObj);
+            var animatedObject = new AnimatedObject('./img/explosion-sprite.png', 100, 100, 74, 9, 1000, true, function () {
+                _this.removeGameObject(animatedObject);
             });
-            aObj.left = result[i].left;
-            aObj.top = result[i].top;
-            aObj.checkCollision = false;
-            aObj.width = 25;
-            aObj.height = 25;
-            this_1.addGameObject(aObj);
+            animatedObject.left = result[i].left;
+            animatedObject.top = result[i].top;
+            animatedObject.checkCollision = false;
+            animatedObject.width = 25;
+            animatedObject.height = 25;
+            this_1.addGameObject(animatedObject);
         };
         var this_1 = this;
         for (var i = 0; i < result.length; i++) {
             _loop_1(i);
         }
-        if (result.length > 0) {
-            this.createAsteroids(2);
+        this.restoreAsteroidsAmount(result);
+    };
+    GameEngine.prototype.objectsCollide = function (gameObj, gameObj1) {
+        var haveAsteroid = (gameObj instanceof Asteroid) || (gameObj1 instanceof Asteroid);
+        var haveBullet = (gameObj instanceof Bullet) || (gameObj1 instanceof Bullet);
+        if (haveAsteroid === true && haveBullet === true) {
+            this.score = this.score + 10;
+            console.log(this.score);
         }
     };
     GameEngine.prototype.isInsideGameArea = function (gameObject) {
@@ -261,6 +270,18 @@ var GameEngine = (function () {
             gameObject.top > 0 && gameObject.top < gameAreaHeight &&
             goRight > 0 && goRight < gameAreaWidth &&
             goBottom > 0 && goBottom < gameAreaHeight);
+    };
+    GameEngine.prototype.restoreAsteroidsAmount = function (removedObjects) {
+        if (removedObjects.length === 0) {
+            return;
+        }
+        var amountOfAsteroids = 0;
+        for (var i = 0; i < removedObjects.length; i++) {
+            if (removedObjects[i] instanceof Asteroid) {
+                amountOfAsteroids++;
+            }
+        }
+        this.createAsteroids(amountOfAsteroids);
     };
     return GameEngine;
 }());
@@ -363,6 +384,7 @@ var GameObject = (function () {
     GameObject.prototype.start = function () {
         this.element = $('<div></div>');
         this.gameArea.append(this.element);
+        this.element.addClass('gameObject');
         this.element.css({
             'width': this.width + 'px',
             'height': this.height + 'px'
@@ -614,6 +636,8 @@ var Asteroid = (function (_super) {
     Asteroid.prototype.draw = function () {
         _super.prototype.draw.call(this);
     };
+    Asteroid.prototype.f2 = function () {
+    };
     return Asteroid;
 }(MovingObject));
 /// <reference path="MovingObject.ts" />
@@ -644,13 +668,17 @@ var StarShip = (function (_super) {
     __extends(StarShip, _super);
     function StarShip() {
         var _this = _super.call(this) || this;
-        _this.width = 25; // todo check why it isn't working
-        _this.height = 25;
+        _this.width = 50;
+        _this.height = 50;
         return _this;
     }
     StarShip.prototype.start = function () {
+        var _this = this;
         _super.prototype.start.call(this);
         this.element.addClass('starShip');
+        setTimeout(function () {
+            _this.checkCollision = true;
+        }, 3000);
     };
     StarShip.prototype.update = function () {
         var oldTop = this.top;
