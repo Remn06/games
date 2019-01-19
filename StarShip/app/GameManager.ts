@@ -56,6 +56,10 @@ class GameManager {
     public getScore() {
         return this.gameEngine.getScore();
     }
+    
+    public getLives() {
+        return this.gameEngine.getLives();
+    }
 
 }
 

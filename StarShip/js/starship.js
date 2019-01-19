@@ -65,6 +65,7 @@ var GameEngine = (function () {
         this.timerHandle = null;
         this.gameArea = $('#gameArea');
         this.score = null;
+        this.lives = null;
         var self = this;
         $(window).resize(function () {
             self.onWindowResize();
@@ -76,9 +77,11 @@ var GameEngine = (function () {
         this.isStarted = true;
         this.gameObjects = [];
         this.score = 0;
+        this.lives = 5;
         this.createStarShip();
         this.createAsteroids(5);
         this.createScoreIndicator();
+        this.createLivesIndicator();
         this.startTimer();
     };
     GameEngine.prototype.addGameObject = function (gameObject) {
@@ -125,8 +128,19 @@ var GameEngine = (function () {
     GameEngine.prototype.onAction = function (action) {
         if (action === Action.left || action === Action.right ||
             action === Action.forward || action === Action.backward || action === Action.fire) {
-            this.gameObjects[0].onAction(action);
+            var starShip = this.findStarShip();
+            if (starShip != null) {
+                starShip.onAction(action);
+            }
         }
+    };
+    GameEngine.prototype.findStarShip = function () {
+        for (var i = 0; i < this.gameObjects.length; i++) {
+            if (this.gameObjects[i] instanceof StarShip) {
+                return this.gameObjects[i];
+            }
+        }
+        return null;
     };
     GameEngine.prototype.onWindowResize = function () {
         this.gameArea.css({
@@ -150,11 +164,23 @@ var GameEngine = (function () {
         s.checkCollision = false;
         this.addGameObject(s);
     };
+    GameEngine.prototype.createGameOverObject = function () {
+        var gameOver = new GameOverObject();
+        gameOver.left = this.gameArea.width() / 2 - gameOver.width / 2;
+        gameOver.top = this.gameArea.height() / 2 - gameOver.height / 2;
+        this.addGameObject(gameOver);
+    };
     GameEngine.prototype.createScoreIndicator = function () {
         var scoreIndicator = new ScoreIndicator();
         scoreIndicator.left = 10;
         scoreIndicator.top = 10;
         this.addGameObject(scoreIndicator);
+    };
+    GameEngine.prototype.createLivesIndicator = function () {
+        var livesObject = new LivesObject();
+        livesObject.left = 100;
+        livesObject.top = 10;
+        this.addGameObject(livesObject);
     };
     GameEngine.prototype.calcAsteroidPos = function (asteroid) {
         var gameAreaWidth = this.gameArea.width();
@@ -264,6 +290,7 @@ var GameEngine = (function () {
             _loop_1(i);
         }
         this.restoreAsteroidsAmount(result);
+        this.checkIfCruiserDeleted(result);
     };
     GameEngine.prototype.objectsCollide = function (gameObj, gameObj1) {
         var haveAsteroid = (gameObj instanceof Asteroid) || (gameObj1 instanceof Asteroid);
@@ -284,6 +311,30 @@ var GameEngine = (function () {
     };
     GameEngine.prototype.getScore = function () {
         return this.score;
+    };
+    GameEngine.prototype.getLives = function () {
+        return this.lives;
+    };
+    GameEngine.prototype.checkIfCruiserDeleted = function (removedObjects) {
+        if (removedObjects.length === 0) {
+            return;
+        }
+        var isDeleted = false;
+        for (var i = 0; i < removedObjects.length; i++) {
+            if (removedObjects[i] instanceof StarShip) {
+                isDeleted = true;
+                break;
+            }
+        }
+        if (isDeleted === true) {
+            this.lives--;
+            if (this.lives > 0) {
+                this.createStarShip();
+            }
+            else {
+                this.createGameOverObject();
+            }
+        }
     };
     GameEngine.prototype.restoreAsteroidsAmount = function (removedObjects) {
         if (removedObjects.length === 0) {
@@ -345,6 +396,9 @@ var GameManager = (function () {
     };
     GameManager.prototype.getScore = function () {
         return this.gameEngine.getScore();
+    };
+    GameManager.prototype.getLives = function () {
+        return this.gameEngine.getLives();
     };
     return GameManager;
 }());
@@ -689,6 +743,87 @@ var Bullet = (function (_super) {
     };
     return Bullet;
 }(MovingObject));
+var GameOverObject = (function (_super) {
+    __extends(GameOverObject, _super);
+    function GameOverObject() {
+        var _this = _super.call(this) || this;
+        _this.gameOverText = 'GAME OVER';
+        return _this;
+    }
+    GameOverObject.prototype.start = function () {
+        _super.prototype.start.call(this);
+        this.element.addClass('gameOverText');
+        this.element.css({
+            'width': '',
+            'height': ''
+        });
+    };
+    GameOverObject.prototype.draw = function () {
+        _super.prototype.draw.call(this);
+        this.element.text(this.gameOverText);
+    };
+    GameOverObject.prototype.update = function () {
+        _super.prototype.update.call(this);
+        this.left = this.gameArea.width() / 2 - this.element.width() / 2;
+        this.top = this.gameArea.height() / 2 - this.element.height() / 2;
+    };
+    return GameOverObject;
+}(GameObject));
+var LivesObject = (function (_super) {
+    __extends(LivesObject, _super);
+    function LivesObject() {
+        var _this = _super.call(this) || this;
+        _this.lives = null;
+        _this.elementWidth = 25;
+        _this.drawnLives = 0;
+        _this.width = _this.elementWidth * _this.lives;
+        return _this;
+    }
+    LivesObject.prototype.start = function () {
+        _super.prototype.start.call(this);
+    };
+    LivesObject.prototype.draw = function () {
+        _super.prototype.draw.call(this);
+        if (this.drawnLives === this.lives) {
+            return;
+        }
+        this.element.empty();
+        for (var i = 0; i < this.lives; i++) {
+            var liveElement = $('<div class="livesIndicatorElement"></div>');
+            liveElement.css({
+                'left': i * this.elementWidth + 'px'
+            });
+            this.element.append(liveElement);
+        }
+        this.drawnLives = this.lives;
+    };
+    LivesObject.prototype.update = function () {
+        _super.prototype.update.call(this);
+        this.lives = GameManager.instance().getLives();
+    };
+    return LivesObject;
+}(GameObject));
+var ScoreIndicator = (function (_super) {
+    __extends(ScoreIndicator, _super);
+    function ScoreIndicator() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.score = null;
+        return _this;
+    }
+    ScoreIndicator.prototype.start = function () {
+        _super.prototype.start.call(this);
+        this.element.addClass('scoreIndicator');
+    };
+    ScoreIndicator.prototype.draw = function () {
+        _super.prototype.draw.call(this);
+        this.element.text(this.score.toString());
+    };
+    ScoreIndicator.prototype.update = function () {
+        _super.prototype.update.call(this);
+        this.score = GameManager.instance().getScore();
+    };
+    return ScoreIndicator;
+}(GameObject));
 /// <reference path="MovingObject.ts" />
 var StarShip = (function (_super) {
     __extends(StarShip, _super);
@@ -822,25 +957,4 @@ var StarShip = (function (_super) {
     };
     return StarShip;
 }(MovingObject));
-var ScoreIndicator = (function (_super) {
-    __extends(ScoreIndicator, _super);
-    function ScoreIndicator() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.score = null;
-        return _this;
-    }
-    ScoreIndicator.prototype.start = function () {
-        _super.prototype.start.call(this);
-        this.element.addClass('scoreIndicator');
-    };
-    ScoreIndicator.prototype.draw = function () {
-        _super.prototype.draw.call(this);
-        this.element.text(this.score.toString());
-    };
-    ScoreIndicator.prototype.update = function () {
-        _super.prototype.update.call(this);
-        this.score = GameManager.instance().getScore();
-    };
-    return ScoreIndicator;
-}(GameObject));
 //# sourceMappingURL=starship.js.map

@@ -8,7 +8,6 @@ class GameObject {
     protected element: JQuery = null;
 
     constructor() {
-
     }
 
     start() {
@@ -19,6 +18,7 @@ class GameObject {
             'width': this.width + 'px',
             'height': this.height + 'px'
         });
+
     };
 
     draw() { //todo check how object is drawing according to its width and height.

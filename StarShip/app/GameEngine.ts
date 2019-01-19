@@ -5,6 +5,7 @@ class GameEngine {
     timerHandle: any = null;
     gameArea = $('#gameArea');
     private score: number = null;
+    private lives: number = null;
 
     constructor() {
         let self = this;
@@ -23,10 +24,12 @@ class GameEngine {
         this.gameObjects = [];
 
         this.score = 0;
+        this.lives = 5;
 
         this.createStarShip();
         this.createAsteroids(5);
         this.createScoreIndicator();
+        this.createLivesIndicator();
         this.startTimer();
     }
 
@@ -85,9 +88,20 @@ class GameEngine {
     onAction(action: Action) {
         if(action === Action.left || action === Action.right ||
             action === Action.forward || action === Action.backward || action === Action.fire) {
-            (this.gameObjects[0] as StarShip).onAction(action);
-
+            const starShip = this.findStarShip();
+            if(starShip != null) {
+                starShip.onAction(action);
+            }
         }
+    }
+
+    findStarShip(): StarShip {
+        for(let i = 0; i < this.gameObjects.length; i++){
+            if(this.gameObjects[i] instanceof StarShip){
+                return this.gameObjects[i] as StarShip;
+            }
+        }
+        return null;
     }
 
     onWindowResize() {
@@ -115,11 +129,25 @@ class GameEngine {
         this.addGameObject(s);
     }
 
+    createGameOverObject(): void {
+        let gameOver = new GameOverObject();
+        gameOver.left = this.gameArea.width() / 2 - gameOver.width / 2;
+        gameOver.top = this.gameArea.height() / 2 - gameOver.height / 2;
+        this.addGameObject(gameOver);
+    }
+
     private createScoreIndicator(): void {
         let scoreIndicator = new ScoreIndicator();
         scoreIndicator.left = 10;
         scoreIndicator.top = 10;
         this.addGameObject(scoreIndicator);
+    }
+
+    private createLivesIndicator(): void {
+        let livesObject = new LivesObject();
+        livesObject.left = 100;
+        livesObject.top = 10;
+        this.addGameObject(livesObject);
     }
 
     calcAsteroidPos(asteroid: Asteroid): void{
@@ -231,6 +259,7 @@ class GameEngine {
         }
 
         this.restoreAsteroidsAmount(result);
+        this.checkIfCruiserDeleted(result);
     }
 
     public objectsCollide(gameObj: GameObject, gameObj1: GameObject) {
@@ -257,6 +286,34 @@ class GameEngine {
 
     public getScore(): number {
         return this.score;
+    }
+
+    public getLives(): number {
+        return this.lives;
+    }
+
+    public checkIfCruiserDeleted(removedObjects: GameObject[]): void {
+        if(removedObjects.length === 0) {
+            return;
+        }
+
+        let isDeleted: boolean = false;
+
+        for(let i = 0; i < removedObjects.length; i++){
+            if(removedObjects[i] instanceof StarShip) {
+                isDeleted = true;
+                break;
+            }
+        }
+
+        if(isDeleted === true) {
+            this.lives--;
+            if(this.lives > 0) {
+                this.createStarShip();
+            } else {
+                this.createGameOverObject();
+            }
+        }
     }
 
     private restoreAsteroidsAmount(removedObjects: GameObject[]): void {

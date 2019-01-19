@@ -27,7 +27,7 @@
     z-index: 1;
     background-image: url("../img/space.jpg");
     overflow: hidden;
-
+    background-size: cover;
 }
 
 .gameObject {
@@ -56,4 +56,25 @@
     color: red;
     font-weight: bold;
     font-size: 21px;
+}
+
+.livesIndicator {
+    position: relative;
+}
+
+.livesIndicatorElement {
+    position: absolute;
+    background-size: cover;
+    transform: rotate(-90deg);
+    background-image: url("../img/cruiser.png");
+    width: 25px;
+    height: 25px;
+    top: 0;
+    left: 0;
+}
+
+.gameOverText {
+    color: red;
+    font-weight: bold;
+    font-size: 100px;
 }
