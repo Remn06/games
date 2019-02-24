@@ -73,6 +73,7 @@ var GameEngine = (function () {
         this.onWindowResize();
     }
     GameEngine.prototype.startNewGame = function () {
+        var _this = this;
         this.gameArea.empty();
         this.isStarted = true;
         this.gameObjects = [];
@@ -80,9 +81,37 @@ var GameEngine = (function () {
         this.lives = 5;
         this.createStarShip();
         this.createAsteroids(5);
-        this.createScoreIndicator();
+        //this.createScoreIndicator();
         this.createLivesIndicator();
         this.startTimer();
+        var loadedObjects = GameLoader.load({
+            scenes: [{
+                    name: 'StarShip Scene',
+                    gameObjects: [{
+                            name: 'ScoreIndicator',
+                            transform: {
+                                width: 100,
+                                height: 100,
+                                left: 10,
+                                top: 10
+                            },
+                            components: [
+                                {
+                                    name: 'HtmlRenderer',
+                                    data: [{ name: 'className', value: 'scoreIndicator' }]
+                                },
+                                {
+                                    name: 'ScoreIndicator',
+                                    data: []
+                                }
+                            ]
+                        }]
+                }
+            ]
+        });
+        loadedObjects.forEach(function (gameObject) {
+            _this.addGameObject(gameObject);
+        });
     };
     GameEngine.prototype.addGameObject = function (gameObject) {
         gameObject.start();
@@ -159,27 +188,27 @@ var GameEngine = (function () {
     };
     GameEngine.prototype.createStarShip = function () {
         var s = new StarShip();
-        s.left = this.gameArea.width() / 2 - s.width / 2;
-        s.top = this.gameArea.height() / 2 - s.height / 2;
+        s.transform.left = this.gameArea.width() / 2 - s.transform.width / 2;
+        s.transform.top = this.gameArea.height() / 2 - s.transform.height / 2;
         s.checkCollision = false;
         this.addGameObject(s);
     };
     GameEngine.prototype.createGameOverObject = function () {
         var gameOver = new GameOverObject();
-        gameOver.left = this.gameArea.width() / 2 - gameOver.width / 2;
-        gameOver.top = this.gameArea.height() / 2 - gameOver.height / 2;
+        gameOver.transform.left = this.gameArea.width() / 2 - gameOver.transform.width / 2;
+        gameOver.transform.top = this.gameArea.height() / 2 - gameOver.transform.height / 2;
         this.addGameObject(gameOver);
     };
-    GameEngine.prototype.createScoreIndicator = function () {
-        var scoreIndicator = new ScoreIndicator();
-        scoreIndicator.left = 10;
-        scoreIndicator.top = 10;
-        this.addGameObject(scoreIndicator);
-    };
+    /* private createScoreIndicator(): void {
+         let scoreIndicator = new ScoreIndicator();
+         scoreIndicator.left = 10;
+         scoreIndicator.top = 10;
+         this.addGameObject(scoreIndicator);
+     }*/
     GameEngine.prototype.createLivesIndicator = function () {
         var livesObject = new LivesObject();
-        livesObject.left = 100;
-        livesObject.top = 10;
+        livesObject.transform.left = 100;
+        livesObject.transform.top = 10;
         this.addGameObject(livesObject);
     };
     GameEngine.prototype.calcAsteroidPos = function (asteroid) {
@@ -188,33 +217,33 @@ var GameEngine = (function () {
         var side = this.getRandom(0, 3);
         switch (side) {
             case 0:
-                asteroid.top = 0 - asteroid.height;
+                asteroid.transform.top = 0 - asteroid.transform.height;
                 break;
             case 1:
-                asteroid.left = gameAreaWidth;
+                asteroid.transform.left = gameAreaWidth;
                 break;
             case 2:
-                asteroid.top = gameAreaHeight;
+                asteroid.transform.top = gameAreaHeight;
                 break;
             case 3:
-                asteroid.left = 0 - asteroid.width;
+                asteroid.transform.left = 0 - asteroid.transform.width;
                 break;
             default:
         }
         switch (side) {
             case 0:
             case 2:
-                asteroid.left = this.getRandom(0, gameAreaWidth - asteroid.width - 1);
+                asteroid.transform.left = this.getRandom(0, gameAreaWidth - asteroid.transform.width - 1);
                 break;
             case 1:
             case 3:
-                asteroid.top = this.getRandom(0, gameAreaHeight - asteroid.height - 1);
+                asteroid.transform.top = this.getRandom(0, gameAreaHeight - asteroid.transform.height - 1);
                 break;
             default:
         }
         switch (side) {
             case 0:
-                if (asteroid.left < gameAreaWidth / 2) {
+                if (asteroid.transform.left < gameAreaWidth / 2) {
                     asteroid.direction = MovingObjectDirection.southeast;
                 }
                 else {
@@ -222,7 +251,7 @@ var GameEngine = (function () {
                 }
                 break;
             case 1:
-                if (asteroid.top < gameAreaHeight / 2) {
+                if (asteroid.transform.top < gameAreaHeight / 2) {
                     asteroid.direction = MovingObjectDirection.southwest;
                 }
                 else {
@@ -230,7 +259,7 @@ var GameEngine = (function () {
                 }
                 break;
             case 2:
-                if (asteroid.left < gameAreaWidth / 2) {
+                if (asteroid.transform.left < gameAreaWidth / 2) {
                     asteroid.direction = MovingObjectDirection.northeast;
                 }
                 else {
@@ -238,7 +267,7 @@ var GameEngine = (function () {
                 }
                 break;
             case 3:
-                if (asteroid.top < gameAreaHeight / 2) {
+                if (asteroid.transform.top < gameAreaHeight / 2) {
                     asteroid.direction = MovingObjectDirection.southeast;
                 }
                 else {
@@ -279,10 +308,10 @@ var GameEngine = (function () {
             var animatedObject = new AnimatedObject('./img/explosion-sprite.png', 100, 100, 74, 9, 1000, true, function () {
                 _this.removeGameObject(animatedObject);
             });
-            animatedObject.left = result[i].left;
-            animatedObject.top = result[i].top;
-            animatedObject.width = 25;
-            animatedObject.height = 25;
+            animatedObject.transform.left = result[i].transform.left;
+            animatedObject.transform.top = result[i].transform.top;
+            animatedObject.transform.width = 25;
+            animatedObject.transform.height = 25;
             this_1.addGameObject(animatedObject);
         };
         var this_1 = this;
@@ -302,10 +331,10 @@ var GameEngine = (function () {
     GameEngine.prototype.isInsideGameArea = function (gameObject) {
         var gameAreaWidth = this.gameArea.width();
         var gameAreaHeight = this.gameArea.height();
-        var goRight = gameObject.left + gameObject.width;
-        var goBottom = gameObject.top + gameObject.height;
-        return (gameObject.left > 0 && gameObject.left < gameAreaWidth &&
-            gameObject.top > 0 && gameObject.top < gameAreaHeight &&
+        var goRight = gameObject.transform.left + gameObject.transform.width;
+        var goBottom = gameObject.transform.top + gameObject.transform.height;
+        return (gameObject.transform.left > 0 && gameObject.transform.left < gameAreaWidth &&
+            gameObject.transform.top > 0 && gameObject.transform.top < gameAreaHeight &&
             goRight > 0 && goRight < gameAreaWidth &&
             goBottom > 0 && goBottom < gameAreaHeight);
     };
@@ -443,36 +472,45 @@ var GameMenu = (function () {
 }());
 var GameObject = (function () {
     function GameObject() {
-        this.left = 0;
-        this.top = 0;
-        this.width = 100;
-        this.height = 100;
-        this.gameArea = $('#gameArea');
-        this.element = null;
+        this.name = null;
+        this.components = [];
+        this.transform = new Transform();
     }
+    GameObject.prototype.getComponent = function (name) {
+        for (var i = 0; i < this.components.length; i++) {
+            if (this.components[i].name === name) {
+                return this.components[i];
+            }
+        }
+        return null;
+    };
     GameObject.prototype.start = function () {
-        this.element = $('<div></div>');
-        this.gameArea.append(this.element);
-        this.element.addClass('gameObject');
-        this.element.css({
-            'width': this.width + 'px',
-            'height': this.height + 'px'
+        if (this.components.length === 0) {
+            var component = new HtmlRenderer(this);
+            component.name = 'HtmlRenderer';
+            this.components.push(component);
+        }
+        this.components.forEach(function (component) {
+            component.start();
         });
     };
     ;
     GameObject.prototype.draw = function () {
-        this.element.css({
-            'left': this.left + 'px',
-            'top': this.top + 'px'
+        this.components.forEach(function (component) {
+            component.draw();
         });
     };
     ;
     GameObject.prototype.update = function () {
+        this.components.forEach(function (component) {
+            component.update();
+        });
     };
     GameObject.prototype.destroy = function () {
-        this.element.remove();
+        this.components.forEach(function (component) {
+            component.destroy();
+        });
     };
-    ;
     return GameObject;
 }());
 /// <reference path="GameObject.ts" />
@@ -506,13 +544,17 @@ var AnimatedObject = (function (_super) {
     }
     AnimatedObject.prototype.start = function () {
         _super.prototype.start.call(this);
-        this.element.css({ 'background-image': 'url("' + this.pathToTexture + '")' });
-        this.element.css({ 'position': 'absolute' });
-        this.xScale = this.slideWidth / this.width;
-        this.yScale = this.slideHeight / this.height;
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.css({ 'background-image': 'url("' + this.pathToTexture + '")' });
+        renderer.element.css({ 'position': 'absolute' });
+        this.xScale = this.slideWidth / this.transform.width;
+        this.yScale = this.slideHeight / this.transform.height;
         var backgroundXSize = ((this.slideWidth * this.slidesInARow) / this.xScale);
         var backgroundYSize = ((Math.ceil(this.slidesCount / this.slidesInARow) * this.slideHeight) / this.yScale);
-        this.element.css({ 'background-size': backgroundXSize + 'px ' + backgroundYSize + 'px' });
+        renderer.element.css({ 'background-size': backgroundXSize + 'px ' + backgroundYSize + 'px' });
     };
     AnimatedObject.prototype.draw = function () {
         _super.prototype.draw.call(this);
@@ -521,7 +563,11 @@ var AnimatedObject = (function (_super) {
         var xShift = (x * (this.slideWidth / this.xScale));
         var yShift = (y * (this.slideHeight / this.yScale));
         var backPos = '-' + xShift + 'px -' + yShift + 'px';
-        this.element.css({ 'background-position': backPos });
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.css({ 'background-position': backPos });
     };
     AnimatedObject.prototype.update = function () {
         this.slide++;
@@ -545,29 +591,33 @@ var IntersectObject = (function (_super) {
     }
     IntersectObject.prototype.draw = function () {
         _super.prototype.draw.call(this);
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
         if (this.checkCollision === false && this.drawTransparentCollision === true) {
-            this.element.addClass('halfTransparent');
+            renderer.element.addClass('halfTransparent');
         }
         else {
-            this.element.removeClass('halfTransparent');
+            renderer.element.removeClass('halfTransparent');
         }
     };
     ;
     IntersectObject.prototype.intersects = function (gameObject) {
-        if ((gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
-            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)) {
+        if ((gameObject.transform.left >= this.transform.left && gameObject.transform.left <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top >= this.transform.top && gameObject.transform.top <= this.transform.top + this.transform.height)) {
             return true;
         }
-        if ((gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
-            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)) {
+        if ((gameObject.transform.left >= this.transform.left && gameObject.transform.left <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top + gameObject.transform.height >= this.transform.top && gameObject.transform.top + gameObject.transform.height <= this.transform.top + this.transform.height)) {
             return true;
         }
-        if ((gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
-            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)) {
+        if ((gameObject.transform.left + gameObject.transform.width >= this.transform.left && gameObject.transform.left + gameObject.transform.width <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top + gameObject.transform.height >= this.transform.top && gameObject.transform.top + gameObject.transform.height <= this.transform.top + this.transform.height)) {
             return true;
         }
-        if ((gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
-            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)) {
+        if ((gameObject.transform.left + gameObject.transform.width >= this.transform.left && gameObject.transform.left + gameObject.transform.width <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top >= this.transform.top && gameObject.transform.top <= this.transform.top + this.transform.height)) {
             return true;
         }
     };
@@ -585,38 +635,42 @@ var MovingObject = (function (_super) {
     MovingObject.prototype.update = function () {
         switch (this.direction) {
             case MovingObjectDirection.north:
-                this.top -= this.speed;
+                this.transform.top -= this.speed;
                 break;
             case MovingObjectDirection.northeast:
-                this.top -= this.speed;
-                this.left += this.speed;
+                this.transform.top -= this.speed;
+                this.transform.left += this.speed;
                 break;
             case MovingObjectDirection.east:
-                this.left += this.speed;
+                this.transform.left += this.speed;
                 break;
             case MovingObjectDirection.southeast:
-                this.top += this.speed;
-                this.left += this.speed;
+                this.transform.top += this.speed;
+                this.transform.left += this.speed;
                 break;
             case MovingObjectDirection.south:
-                this.top += this.speed;
+                this.transform.top += this.speed;
                 break;
             case MovingObjectDirection.southwest:
-                this.top += this.speed;
-                this.left -= this.speed;
+                this.transform.top += this.speed;
+                this.transform.left -= this.speed;
                 break;
             case MovingObjectDirection.west:
-                this.left -= this.speed;
+                this.transform.left -= this.speed;
                 break;
             case MovingObjectDirection.northwest:
-                this.top -= this.speed;
-                this.left -= this.speed;
+                this.transform.top -= this.speed;
+                this.transform.left -= this.speed;
                 break;
         }
     };
     MovingObject.prototype.updateDirection = function () {
         var deg = this.direction * 45 - 90;
-        this.element.css('transform', 'rotate(' + deg + 'deg)');
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.css('transform', 'rotate(' + deg + 'deg)');
     };
     MovingObject.prototype.turnRight = function (steps) {
         this.direction += steps;
@@ -641,17 +695,21 @@ var Asteroid = (function (_super) {
     __extends(Asteroid, _super);
     function Asteroid() {
         var _this = _super.call(this) || this;
-        _this.width = 25;
-        _this.height = 25;
+        _this.transform.width = 25;
+        _this.transform.height = 25;
         return _this;
     }
     Asteroid.prototype.start = function () {
         _super.prototype.start.call(this);
-        this.element.addClass('asteroid');
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.addClass('asteroid');
     };
     Asteroid.prototype.update = function () {
-        var oldTop = this.top;
-        var oldLeft = this.left;
+        var oldTop = this.transform.top;
+        var oldLeft = this.transform.left;
         _super.prototype.update.call(this);
         if (this.checkCollision === false) {
             if (!GameManager.instance().isInsideGameArea(this)) {
@@ -659,17 +717,21 @@ var Asteroid = (function (_super) {
             }
             this.checkCollision = true;
         }
-        var gameAreaWidth = this.gameArea.width();
-        var gameAreaHeight = this.gameArea.height();
-        if (this.top < 0 || this.left < 0 || (this.left + this.width) > gameAreaWidth || (this.top + this.height) > gameAreaHeight) {
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        var gameAreaWidth = renderer.gameArea.width();
+        var gameAreaHeight = renderer.gameArea.height();
+        if (this.transform.top < 0 || this.transform.left < 0 || (this.transform.left + this.transform.width) > gameAreaWidth || (this.transform.top + this.transform.height) > gameAreaHeight) {
             this.checkRicochet(gameAreaWidth, gameAreaHeight);
-            this.top = oldTop;
-            this.left = oldLeft;
+            this.transform.top = oldTop;
+            this.transform.left = oldLeft;
         }
     };
     ;
     Asteroid.prototype.checkRicochet = function (gameAreaWidth, gameAreaHeight) {
-        if ((this.top + this.height) > gameAreaHeight) {
+        if ((this.transform.top + this.transform.height) > gameAreaHeight) {
             if (this.direction === MovingObjectDirection.southeast) {
                 this.turnLeft(2);
             }
@@ -680,7 +742,7 @@ var Asteroid = (function (_super) {
                 this.turnRight(2);
             }
         }
-        if ((this.left + this.width) > gameAreaWidth) {
+        if ((this.transform.left + this.transform.width) > gameAreaWidth) {
             if (this.direction === MovingObjectDirection.northeast) {
                 this.turnLeft(2);
             }
@@ -691,7 +753,7 @@ var Asteroid = (function (_super) {
                 this.turnRight(2);
             }
         }
-        if (this.top < 0) {
+        if (this.transform.top < 0) {
             if (this.direction === MovingObjectDirection.northeast) {
                 this.turnRight(2);
             }
@@ -702,7 +764,7 @@ var Asteroid = (function (_super) {
                 this.turnLeft(2);
             }
         }
-        if (this.left < 0) {
+        if (this.transform.left < 0) {
             if (this.direction === MovingObjectDirection.northwest) {
                 this.turnRight(2);
             }
@@ -725,19 +787,27 @@ var Bullet = (function (_super) {
     __extends(Bullet, _super);
     function Bullet() {
         var _this = _super.call(this) || this;
-        _this.width = 10;
-        _this.height = 10;
+        _this.transform.width = 10;
+        _this.transform.height = 10;
         return _this;
     }
     Bullet.prototype.start = function () {
         _super.prototype.start.call(this);
-        this.element.addClass('bullet');
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.addClass('bullet');
     };
     Bullet.prototype.update = function () {
         _super.prototype.update.call(this);
-        var gameAreaWidth = this.gameArea.width();
-        var gameAreaHeight = this.gameArea.height();
-        if (this.top < 0 || this.left < 0 || (this.left + this.width) > gameAreaWidth || (this.top + this.height) > gameAreaHeight) {
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        var gameAreaWidth = renderer.gameArea.width();
+        var gameAreaHeight = renderer.gameArea.height();
+        if (this.transform.top < 0 || this.transform.left < 0 || (this.transform.left + this.transform.width) > gameAreaWidth || (this.transform.top + this.transform.height) > gameAreaHeight) {
             GameManager.instance().removeGameObject(this);
         }
     };
@@ -752,20 +822,32 @@ var GameOverObject = (function (_super) {
     }
     GameOverObject.prototype.start = function () {
         _super.prototype.start.call(this);
-        this.element.addClass('gameOverText');
-        this.element.css({
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.addClass('gameOverText');
+        renderer.element.css({
             'width': '',
             'height': ''
         });
     };
     GameOverObject.prototype.draw = function () {
         _super.prototype.draw.call(this);
-        this.element.text(this.gameOverText);
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.text(this.gameOverText);
     };
     GameOverObject.prototype.update = function () {
         _super.prototype.update.call(this);
-        this.left = this.gameArea.width() / 2 - this.element.width() / 2;
-        this.top = this.gameArea.height() / 2 - this.element.height() / 2;
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        this.transform.left = renderer.gameArea.width() / 2 - renderer.element.width() / 2;
+        this.transform.top = renderer.gameArea.height() / 2 - renderer.element.height() / 2;
     };
     return GameOverObject;
 }(GameObject));
@@ -776,7 +858,7 @@ var LivesObject = (function (_super) {
         _this.lives = null;
         _this.elementWidth = 25;
         _this.drawnLives = 0;
-        _this.width = _this.elementWidth * _this.lives;
+        _this.transform.width = _this.elementWidth * _this.lives;
         return _this;
     }
     LivesObject.prototype.start = function () {
@@ -784,16 +866,20 @@ var LivesObject = (function (_super) {
     };
     LivesObject.prototype.draw = function () {
         _super.prototype.draw.call(this);
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
         if (this.drawnLives === this.lives) {
             return;
         }
-        this.element.empty();
+        renderer.element.empty();
         for (var i = 0; i < this.lives; i++) {
             var liveElement = $('<div class="livesIndicatorElement"></div>');
             liveElement.css({
                 'left': i * this.elementWidth + 'px'
             });
-            this.element.append(liveElement);
+            renderer.element.append(liveElement);
         }
         this.drawnLives = this.lives;
     };
@@ -803,58 +889,66 @@ var LivesObject = (function (_super) {
     };
     return LivesObject;
 }(GameObject));
-var ScoreIndicator = (function (_super) {
-    __extends(ScoreIndicator, _super);
-    function ScoreIndicator() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.score = null;
-        return _this;
+var ScoreIndicator = (function () {
+    function ScoreIndicator(gameObject) {
+        this.score = null;
+        this.gameObject = gameObject;
     }
     ScoreIndicator.prototype.start = function () {
-        _super.prototype.start.call(this);
-        this.element.addClass('scoreIndicator');
     };
     ScoreIndicator.prototype.draw = function () {
-        _super.prototype.draw.call(this);
-        this.element.text(this.score.toString());
+        var renderer = this.gameObject.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.text(this.score.toString());
     };
     ScoreIndicator.prototype.update = function () {
-        _super.prototype.update.call(this);
         this.score = GameManager.instance().getScore();
     };
+    ScoreIndicator.prototype.destroy = function () {
+    };
     return ScoreIndicator;
-}(GameObject));
+}());
 /// <reference path="MovingObject.ts" />
 var StarShip = (function (_super) {
     __extends(StarShip, _super);
     function StarShip() {
         var _this = _super.call(this) || this;
-        _this.width = 50;
-        _this.height = 50;
+        _this.transform.width = 50;
+        _this.transform.height = 50;
         return _this;
     }
     StarShip.prototype.start = function () {
         var _this = this;
         _super.prototype.start.call(this);
-        this.element.addClass('starShip');
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        renderer.element.addClass('starShip');
         setTimeout(function () {
             _this.checkCollision = true;
         }, 3000);
     };
     StarShip.prototype.update = function () {
-        var oldTop = this.top;
-        var oldLeft = this.left;
+        var oldTop = this.transform.top;
+        var oldLeft = this.transform.left;
         _super.prototype.update.call(this);
-        var gameAreaWidth = this.gameArea.width();
-        var gameAreaHeight = this.gameArea.height();
-        if (this.top < 0 || this.left < 0 || (this.left + this.width) > gameAreaWidth || (this.top + this.height) > gameAreaHeight) {
+        var renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        var gameAreaWidth = renderer.gameArea.width();
+        var gameAreaHeight = renderer.gameArea.height();
+        if (this.transform.top < 0 || this.transform.left < 0 || (this.transform.left + this.transform.width) > gameAreaWidth || (this.transform.top + this.transform.height) > gameAreaHeight) {
             this.checkRicochet(gameAreaWidth, gameAreaHeight);
-            this.top = oldTop;
-            this.left = oldLeft;
+            this.transform.top = oldTop;
+            this.transform.left = oldLeft;
         }
     };
     StarShip.prototype.checkRicochet = function (gameAreaWidth, gameAreaHeight) {
-        if ((this.top + this.height) > gameAreaHeight) {
+        if ((this.transform.top + this.transform.height) > gameAreaHeight) {
             if (this.direction === MovingObjectDirection.southeast) {
                 this.turnLeft(1);
             }
@@ -865,7 +959,7 @@ var StarShip = (function (_super) {
                 this.turnRight(1);
             }
         }
-        if ((this.left + this.width) > gameAreaWidth) {
+        if ((this.transform.left + this.transform.width) > gameAreaWidth) {
             if (this.direction === MovingObjectDirection.northeast) {
                 this.turnLeft(1);
             }
@@ -876,7 +970,7 @@ var StarShip = (function (_super) {
                 this.turnRight(1);
             }
         }
-        if (this.top < 0) {
+        if (this.transform.top < 0) {
             if (this.direction === MovingObjectDirection.northeast) {
                 this.turnRight(1);
             }
@@ -887,7 +981,7 @@ var StarShip = (function (_super) {
                 this.turnRight(1);
             }
         }
-        if (this.left < 0) {
+        if (this.transform.left < 0) {
             if (this.direction === MovingObjectDirection.northwest) {
                 this.turnRight(1);
             }
@@ -918,36 +1012,36 @@ var StarShip = (function (_super) {
             bullet.speed = this.speed + 1;
             bullet.direction = this.direction;
             if (this.direction === MovingObjectDirection.north) {
-                bullet.left = this.left + (this.width / 2 - bullet.width / 2);
-                bullet.top = this.top - bullet.height;
+                bullet.transform.left = this.transform.left + (this.transform.width / 2 - bullet.transform.width / 2);
+                bullet.transform.top = this.transform.top - bullet.transform.height;
             }
             if (this.direction === MovingObjectDirection.northeast) {
-                bullet.left = this.left + this.width; // - bullet.width;
-                bullet.top = this.top - bullet.height; // + bullet.height / 2;
+                bullet.transform.left = this.transform.left + this.transform.width; // - bullet.width;
+                bullet.transform.top = this.transform.top - bullet.transform.height; // + bullet.height / 2;
             }
             if (this.direction === MovingObjectDirection.east) {
-                bullet.left = this.left + this.width;
-                bullet.top = (this.top + this.height / 2) - bullet.height / 2;
+                bullet.transform.left = this.transform.left + this.transform.width;
+                bullet.transform.top = (this.transform.top + this.transform.height / 2) - bullet.transform.height / 2;
             }
             if (this.direction === MovingObjectDirection.southeast) {
-                bullet.left = this.left + this.width;
-                bullet.top = this.top + this.height;
+                bullet.transform.left = this.transform.left + this.transform.width;
+                bullet.transform.top = this.transform.top + this.transform.height;
             }
             if (this.direction === MovingObjectDirection.south) {
-                bullet.left = this.left + (this.width / 2 - bullet.width / 2);
-                bullet.top = this.top + this.height;
+                bullet.transform.left = this.transform.left + (this.transform.width / 2 - bullet.transform.width / 2);
+                bullet.transform.top = this.transform.top + this.transform.height;
             }
             if (this.direction === MovingObjectDirection.southwest) {
-                bullet.left = this.left - bullet.width;
-                bullet.top = this.top + this.height;
+                bullet.transform.left = this.transform.left - bullet.transform.width;
+                bullet.transform.top = this.transform.top + this.transform.height;
             }
             if (this.direction === MovingObjectDirection.west) {
-                bullet.left = this.left - bullet.width;
-                bullet.top = this.top + (this.height / 2 - bullet.height / 2);
+                bullet.transform.left = this.transform.left - bullet.transform.width;
+                bullet.transform.top = this.transform.top + (this.transform.height / 2 - bullet.transform.height / 2);
             }
             if (this.direction === MovingObjectDirection.northwest) {
-                bullet.left = this.left - bullet.width;
-                bullet.top = this.top - bullet.height;
+                bullet.transform.left = this.transform.left - bullet.transform.width;
+                bullet.transform.top = this.transform.top - bullet.transform.height;
             }
             GameManager.instance().addGameObject(bullet);
         }
@@ -957,4 +1051,106 @@ var StarShip = (function (_super) {
     };
     return StarShip;
 }(MovingObject));
+var HtmlRenderer = (function () {
+    function HtmlRenderer(gameObject) {
+        this.element = null;
+        this.gameArea = $('#gameArea');
+        this.gameObject = gameObject;
+    }
+    HtmlRenderer.prototype.start = function () {
+        this.element = $('<div></div>');
+        this.element.addClass('gameObject');
+        if (this.className != null) {
+            this.element.addClass(this.className);
+        }
+        this.element.css({
+            'width': this.gameObject.transform.width + 'px',
+            'height': this.gameObject.transform.height + 'px'
+        });
+        this.gameArea.append(this.element);
+    };
+    HtmlRenderer.prototype.draw = function () {
+        this.element.css({
+            'left': this.gameObject.transform.left + 'px',
+            'top': this.gameObject.transform.top + 'px'
+        });
+    };
+    HtmlRenderer.prototype.update = function () {
+    };
+    HtmlRenderer.prototype.destroy = function () {
+        this.element.remove();
+    };
+    return HtmlRenderer;
+}());
+var GameLoader = (function () {
+    function GameLoader() {
+    }
+    GameLoader.load = function (data) {
+        var gameObjects = [];
+        data.scenes[0].gameObjects.forEach(function (gameObjectData) {
+            var gameObject = GameObjectBuilder.build(gameObjectData);
+            gameObjectData.components.forEach(function (componentData) {
+                var component = ComponentBuilder.build(gameObject, componentData);
+                gameObject.components.push(component);
+            });
+            gameObjects.push(gameObject);
+        });
+        return gameObjects;
+    };
+    return GameLoader;
+}());
+var NameValuePair = (function () {
+    function NameValuePair() {
+        this.name = null;
+        this.value = null;
+    }
+    return NameValuePair;
+}());
+var ComponentBuilder = (function () {
+    function ComponentBuilder() {
+    }
+    ComponentBuilder.build = function (gameObject, componentData) {
+        var component;
+        switch (componentData.name) {
+            case 'HtmlRenderer':
+                component = new HtmlRenderer(gameObject);
+                component.name = componentData.name;
+                break;
+            case 'ScoreIndicator':
+                component = new ScoreIndicator(gameObject);
+                component.name = componentData.name;
+                break;
+            default:
+                throw new Error('Component is not implemented');
+        }
+        componentData.data.forEach(function (dataItem) {
+            component[dataItem.name] = dataItem.value;
+        });
+        return component;
+    };
+    return ComponentBuilder;
+}());
+var Transform = (function () {
+    function Transform() {
+        this.left = 0;
+        this.top = 0;
+        this.width = 100;
+        this.height = 100;
+    }
+    return Transform;
+}());
+var GameObjectBuilder = (function () {
+    function GameObjectBuilder() {
+    }
+    GameObjectBuilder.build = function (gameObjectData) {
+        var gameObject = new GameObject();
+        gameObject.name = gameObjectData.name;
+        gameObject.transform.width = gameObjectData.transform.width;
+        gameObject.transform.height = gameObjectData.transform.height;
+        gameObject.transform.left = gameObjectData.transform.left;
+        gameObject.transform.top = gameObjectData.transform.top;
+        return gameObject;
+    };
+    return GameObjectBuilder;
+}());
 //# sourceMappingURL=starship.js.map
