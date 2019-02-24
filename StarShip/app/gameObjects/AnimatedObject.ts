@@ -15,16 +15,20 @@ class AnimatedObject extends GameObject {
 
     start() {
         super.start();
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.css({'background-image': 'url("'+this.pathToTexture+'")'});
+        (renderer as HtmlRenderer).element.css({'position': 'absolute'});
 
-        this.element.css({'background-image': 'url("'+this.pathToTexture+'")'});
-        this.element.css({'position': 'absolute'});
-
-        this.xScale = this.slideWidth / this.width;
-        this.yScale = this.slideHeight / this.height;
+        this.xScale = this.slideWidth / this.transform.width;
+        this.yScale = this.slideHeight / this.transform.height;
         let backgroundXSize = ((this.slideWidth * this.slidesInARow) / this.xScale);
         let backgroundYSize = ((Math.ceil(this.slidesCount / this.slidesInARow) * this.slideHeight) / this.yScale);
 
-        this.element.css({'background-size':  backgroundXSize + 'px ' + backgroundYSize + 'px'});
+
+        (renderer as HtmlRenderer).element.css({'background-size':  backgroundXSize + 'px ' + backgroundYSize + 'px'});
     }
     draw() {
         super.draw();
@@ -35,7 +39,11 @@ class AnimatedObject extends GameObject {
         let yShift = (y * (this.slideHeight / this.yScale));
         let backPos = '-' + xShift + 'px -' + yShift + 'px';
 
-        this.element.css({'background-position':  backPos});
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.css({'background-position':  backPos});
     }
     update() {
         this.slide++;

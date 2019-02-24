@@ -7,8 +7,12 @@ class GameOverObject extends GameObject {
 
     public start() {
         super.start();
-        this.element.addClass('gameOverText');
-        this.element.css({
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.addClass('gameOverText');
+        (renderer as HtmlRenderer).element.css({
             'width': '',
             'height': ''
         });
@@ -16,13 +20,21 @@ class GameOverObject extends GameObject {
 
     public draw() {
         super.draw();
-        this.element.text(this.gameOverText);
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.text(this.gameOverText);
     }
 
     public update() {
         super.update();
-        this.left = this.gameArea.width() / 2 - this.element.width() / 2;
-        this.top = this.gameArea.height() / 2 - this.element.height() / 2;
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        this.transform.left = (renderer as HtmlRenderer).gameArea.width() / 2 - (renderer as HtmlRenderer).element.width() / 2;
+        this.transform.top = (renderer as HtmlRenderer).gameArea.height() / 2 - (renderer as HtmlRenderer).element.height() / 2;
     }
 
 }

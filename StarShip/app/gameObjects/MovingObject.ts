@@ -12,39 +12,43 @@ class MovingObject extends IntersectObject {
     update() {
         switch(this.direction){
             case MovingObjectDirection.north:
-                this.top -= this.speed;
+                this.transform.top -= this.speed;
                 break;
             case MovingObjectDirection.northeast:
-                this.top -= this.speed;
-                this.left += this.speed;
+                this.transform.top -= this.speed;
+                this.transform.left += this.speed;
                 break;
             case MovingObjectDirection.east:
-                this.left += this.speed;
+                this.transform.left += this.speed;
                 break;
             case MovingObjectDirection.southeast:
-                this.top += this.speed;
-                this.left += this.speed;
+                this.transform.top += this.speed;
+                this.transform.left += this.speed;
                 break;
             case MovingObjectDirection.south:
-                this.top += this.speed;
+                this.transform.top += this.speed;
                 break;
             case MovingObjectDirection.southwest:
-                this.top += this.speed;
-                this.left -= this.speed;
+                this.transform.top += this.speed;
+                this.transform.left -= this.speed;
                 break;
             case MovingObjectDirection.west:
-                this.left -= this.speed;
+                this.transform.left -= this.speed;
                 break;
             case MovingObjectDirection.northwest:
-                this.top -= this.speed;
-                this.left -= this.speed;
+                this.transform.top -= this.speed;
+                this.transform.left -= this.speed;
                 break;
         }
     }
 
     updateDirection() {
         let deg = this.direction * 45 - 90;
-        this.element.css('transform', 'rotate('+deg+'deg)');
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.css('transform', 'rotate('+deg+'deg)');
     }
 
     turnRight(steps: number){

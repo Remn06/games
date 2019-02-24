@@ -4,35 +4,44 @@ class StarShip extends MovingObject {
 
     constructor(){
         super();
-        this.width = 50;
-        this.height = 50;
+        this.transform.width = 50;
+        this.transform.height = 50;
     }
 
     start() {
         super.start();
-        this.element.addClass('starShip');
+
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.addClass('starShip');
+
         setTimeout(() => {
             this.checkCollision = true;
         }, 3000);
     }
 
     update() {
-        let oldTop = this.top;
-        let oldLeft = this.left;
+        let oldTop = this.transform.top;
+        let oldLeft = this.transform.left;
 
         super.update();
-
-        let gameAreaWidth = this.gameArea.width();
-        let gameAreaHeight = this.gameArea.height();
-        if(this.top < 0 || this.left < 0 || (this.left + this.width) > gameAreaWidth || (this.top + this.height) > gameAreaHeight) {
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        let gameAreaWidth = (renderer as HtmlRenderer).gameArea.width();
+        let gameAreaHeight = (renderer as HtmlRenderer).gameArea.height();
+        if(this.transform.top < 0 || this.transform.left < 0 || (this.transform.left + this.transform.width) > gameAreaWidth || (this.transform.top + this.transform.height) > gameAreaHeight) {
             this.checkRicochet(gameAreaWidth, gameAreaHeight);
-            this.top = oldTop;
-            this.left = oldLeft;
+            this.transform.top = oldTop;
+            this.transform.left = oldLeft;
         }
     }
 
     checkRicochet(gameAreaWidth: number, gameAreaHeight: number){
-        if((this.top + this.height) > gameAreaHeight){
+        if((this.transform.top + this.transform.height) > gameAreaHeight){
             if(this.direction === MovingObjectDirection.southeast) {
                 this.turnLeft(1);
             } else if(this.direction === MovingObjectDirection.south){
@@ -41,7 +50,7 @@ class StarShip extends MovingObject {
                 this.turnRight(1);
             }
         }
-        if((this.left + this.width) > gameAreaWidth){
+        if((this.transform.left + this.transform.width) > gameAreaWidth){
             if(this.direction === MovingObjectDirection.northeast) {
                 this.turnLeft(1);
             } else if(this.direction === MovingObjectDirection.east){
@@ -50,7 +59,7 @@ class StarShip extends MovingObject {
                 this.turnRight(1);
             }
         }
-        if(this.top < 0){
+        if(this.transform.top < 0){
             if(this.direction === MovingObjectDirection.northeast) {
                 this.turnRight(1);
             } else if(this.direction === MovingObjectDirection.north){
@@ -59,7 +68,7 @@ class StarShip extends MovingObject {
                 this.turnRight(1);
             }
         }
-        if(this.left < 0){
+        if(this.transform.left < 0){
             if(this.direction === MovingObjectDirection.northwest) {
                 this.turnRight(1);
             } else if(this.direction === MovingObjectDirection.west){
@@ -90,43 +99,43 @@ class StarShip extends MovingObject {
             bullet.direction = this.direction;
 
             if(this.direction === MovingObjectDirection.north) {
-                bullet.left = this.left + (this.width / 2 - bullet.width / 2);
-                bullet.top = this.top - bullet.height;
+                bullet.transform.left = this.transform.left + (this.transform.width / 2 - bullet.transform.width / 2);
+                bullet.transform.top = this.transform.top - bullet.transform.height;
             }
 
             if(this.direction === MovingObjectDirection.northeast) {
-                bullet.left = this.left + this.width;// - bullet.width;
-                bullet.top = this.top - bullet.height; // + bullet.height / 2;
+                bullet.transform.left = this.transform.left + this.transform.width;// - bullet.width;
+                bullet.transform.top = this.transform.top - bullet.transform.height; // + bullet.height / 2;
             }
 
             if(this.direction === MovingObjectDirection.east) {
-                bullet.left = this.left + this.width;
-                bullet.top = (this.top + this.height / 2) - bullet.height / 2;
+                bullet.transform.left = this.transform.left + this.transform.width;
+                bullet.transform.top = (this.transform.top + this.transform.height / 2) - bullet.transform.height / 2;
             }
 
             if(this.direction === MovingObjectDirection.southeast) {
-                bullet.left = this.left + this.width;
-                bullet.top = this.top + this.height;
+                bullet.transform.left = this.transform.left + this.transform.width;
+                bullet.transform.top = this.transform.top + this.transform.height;
             }
 
             if(this.direction === MovingObjectDirection.south) {
-                bullet.left = this.left + (this.width / 2 - bullet.width / 2);
-                bullet.top = this.top + this.height;
+                bullet.transform.left = this.transform.left + (this.transform.width / 2 - bullet.transform.width / 2);
+                bullet.transform.top = this.transform.top + this.transform.height;
             }
 
             if(this.direction === MovingObjectDirection.southwest) {
-                bullet.left = this.left - bullet.width;
-                bullet.top = this.top + this.height;
+                bullet.transform.left = this.transform.left - bullet.transform.width;
+                bullet.transform.top = this.transform.top + this.transform.height;
             }
 
             if(this.direction === MovingObjectDirection.west) {
-                bullet.left = this.left - bullet.width;
-                bullet.top = this.top + (this.height / 2 - bullet.height / 2);
+                bullet.transform.left = this.transform.left - bullet.transform.width;
+                bullet.transform.top = this.transform.top + (this.transform.height / 2 - bullet.transform.height / 2);
             }
 
             if(this.direction === MovingObjectDirection.northwest) {
-                bullet.left = this.left - bullet.width;
-                bullet.top = this.top - bullet.height;
+                bullet.transform.left = this.transform.left - bullet.transform.width;
+                bullet.transform.top = this.transform.top - bullet.transform.height;
             }
 
             GameManager.instance().addGameObject(bullet);

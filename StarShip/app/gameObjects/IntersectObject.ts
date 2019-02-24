@@ -4,36 +4,39 @@ class IntersectObject extends GameObject {
 
     draw() {
         super.draw();
-
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
         if(this.checkCollision === false && this.drawTransparentCollision === true) {
-            this.element.addClass('halfTransparent');
+            (renderer as HtmlRenderer).element.addClass('halfTransparent');
         } else {
-            this.element.removeClass('halfTransparent');
+            (renderer as HtmlRenderer).element.removeClass('halfTransparent');
         }
     };
 
     intersects(gameObject: GameObject): boolean {
         if(
-            (gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
-            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)
+            (gameObject.transform.left >= this.transform.left && gameObject.transform.left <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top >= this.transform.top && gameObject.transform.top <= this.transform.top + this.transform.height)
         ) {
             return true;
         }
         if(
-            (gameObject.left >= this.left && gameObject.left <= this.left + this.width) &&
-            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)
+            (gameObject.transform.left >= this.transform.left && gameObject.transform.left <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top + gameObject.transform.height >= this.transform.top && gameObject.transform.top + gameObject.transform.height <= this.transform.top + this.transform.height)
         ) {
             return true;
         }
         if(
-            (gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
-            (gameObject.top + gameObject.height >= this.top && gameObject.top + gameObject.height <= this.top + this.height)
+            (gameObject.transform.left + gameObject.transform.width >= this.transform.left && gameObject.transform.left + gameObject.transform.width <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top + gameObject.transform.height >= this.transform.top && gameObject.transform.top + gameObject.transform.height <= this.transform.top + this.transform.height)
         ) {
             return true;
         }
         if(
-            (gameObject.left + gameObject.width >= this.left && gameObject.left + gameObject.width <= this.left + this.width) &&
-            (gameObject.top >= this.top && gameObject.top <= this.top + this.height)
+            (gameObject.transform.left + gameObject.transform.width >= this.transform.left && gameObject.transform.left + gameObject.transform.width <= this.transform.left + this.transform.width) &&
+            (gameObject.transform.top >= this.transform.top && gameObject.transform.top <= this.transform.top + this.transform.height)
         ) {
             return true;
         }

@@ -1,0 +1,3 @@
+interface IGameData {
+    scenes: IGameScene[];
+}

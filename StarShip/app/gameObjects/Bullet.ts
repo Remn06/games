@@ -4,20 +4,28 @@ class Bullet extends MovingObject {
 
     constructor() {
         super();
-        this.width = 10;
-        this.height = 10;
+        this.transform.width = 10;
+        this.transform.height = 10;
     }
 
     start() {
         super.start();
-        this.element.addClass('bullet');
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.addClass('bullet');
     }
 
     update() {
         super.update();
-        let gameAreaWidth = this.gameArea.width();
-        let gameAreaHeight = this.gameArea.height();
-        if (this.top < 0 || this.left < 0 || (this.left + this.width) > gameAreaWidth || (this.top + this.height) > gameAreaHeight) {
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        let gameAreaWidth = (renderer as HtmlRenderer).gameArea.width();
+        let gameAreaHeight = (renderer as HtmlRenderer).gameArea.height();
+        if (this.transform.top < 0 || this.transform.left < 0 || (this.transform.left + this.transform.width) > gameAreaWidth || (this.transform.top + this.transform.height) > gameAreaHeight) {
             GameManager.instance().removeGameObject(this);
         }
     }

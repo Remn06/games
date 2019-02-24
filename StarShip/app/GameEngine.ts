@@ -28,9 +28,41 @@ class GameEngine {
 
         this.createStarShip();
         this.createAsteroids(5);
-        this.createScoreIndicator();
+        //this.createScoreIndicator();
         this.createLivesIndicator();
         this.startTimer();
+
+        const loadedObjects = GameLoader.load(
+            {
+                scenes: [ {
+                    name: 'StarShip Scene',
+                    gameObjects: [{
+                        name: 'ScoreIndicator',
+                        transform: {
+                            width: 100,
+                            height: 100,
+                            left: 10,
+                            top: 10
+                        },
+                        components: [
+                            {
+                                name: 'HtmlRenderer',
+                                data: [{name: 'className', value: 'scoreIndicator'}]
+                            },
+                            {
+                                name: 'ScoreIndicator',
+                                data: []
+                            }
+                        ]
+                    }]
+                }
+                ]
+            }
+        );
+
+        loadedObjects.forEach((gameObject) => {
+            this.addGameObject(gameObject);
+        });
     }
 
     addGameObject (gameObject: GameObject) {
@@ -123,30 +155,30 @@ class GameEngine {
 
     createStarShip(): void {
         let s = new StarShip();
-        s.left = this.gameArea.width() / 2 - s.width / 2;
-        s.top = this.gameArea.height() / 2 - s.height / 2;
+        s.transform.left = this.gameArea.width() / 2 - s.transform.width / 2;
+        s.transform.top = this.gameArea.height() / 2 - s.transform.height / 2;
         s.checkCollision = false;
         this.addGameObject(s);
     }
 
     createGameOverObject(): void {
         let gameOver = new GameOverObject();
-        gameOver.left = this.gameArea.width() / 2 - gameOver.width / 2;
-        gameOver.top = this.gameArea.height() / 2 - gameOver.height / 2;
+        gameOver.transform.left = this.gameArea.width() / 2 - gameOver.transform.width / 2;
+        gameOver.transform.top = this.gameArea.height() / 2 - gameOver.transform.height / 2;
         this.addGameObject(gameOver);
     }
 
-    private createScoreIndicator(): void {
+   /* private createScoreIndicator(): void {
         let scoreIndicator = new ScoreIndicator();
         scoreIndicator.left = 10;
         scoreIndicator.top = 10;
         this.addGameObject(scoreIndicator);
-    }
+    }*/
 
     private createLivesIndicator(): void {
         let livesObject = new LivesObject();
-        livesObject.left = 100;
-        livesObject.top = 10;
+        livesObject.transform.left = 100;
+        livesObject.transform.top = 10;
         this.addGameObject(livesObject);
     }
 
@@ -158,16 +190,16 @@ class GameEngine {
 
         switch (side) {
             case 0:
-                asteroid.top = 0 - asteroid.height;
+                asteroid.transform.top = 0 - asteroid.transform.height;
                 break;
             case 1:
-                asteroid.left = gameAreaWidth;
+                asteroid.transform.left = gameAreaWidth;
                 break;
             case 2:
-                asteroid.top = gameAreaHeight;
+                asteroid.transform.top = gameAreaHeight;
                 break;
             case 3:
-                asteroid.left = 0 - asteroid.width;
+                asteroid.transform.left = 0 - asteroid.transform.width;
                 break;
             default:
         }
@@ -175,39 +207,39 @@ class GameEngine {
         switch (side) {
             case 0:
             case 2:
-                asteroid.left = this.getRandom(0, gameAreaWidth - asteroid.width - 1);
+                asteroid.transform.left = this.getRandom(0, gameAreaWidth - asteroid.transform.width - 1);
                 break;
             case 1:
             case 3:
-                asteroid.top = this.getRandom(0, gameAreaHeight - asteroid.height - 1);
+                asteroid.transform.top = this.getRandom(0, gameAreaHeight - asteroid.transform.height - 1);
                 break;
             default:
         }
 
         switch (side) {
             case 0:
-                if(asteroid.left < gameAreaWidth / 2) {
+                if(asteroid.transform.left < gameAreaWidth / 2) {
                     asteroid.direction = MovingObjectDirection.southeast;
                 } else {
                     asteroid.direction = MovingObjectDirection.southwest;
                 }
                 break;
             case 1:
-                if(asteroid.top < gameAreaHeight / 2) {
+                if(asteroid.transform.top < gameAreaHeight / 2) {
                     asteroid.direction = MovingObjectDirection.southwest;
                 } else {
                     asteroid.direction = MovingObjectDirection.northwest;
                 }
                 break;
             case 2:
-                if(asteroid.left < gameAreaWidth / 2) {
+                if(asteroid.transform.left < gameAreaWidth / 2) {
                     asteroid.direction = MovingObjectDirection.northeast;
                 } else {
                     asteroid.direction = MovingObjectDirection.northwest;
                 }
                 break;
             case 3:
-                if(asteroid.top < gameAreaHeight / 2) {
+                if(asteroid.transform.top < gameAreaHeight / 2) {
                     asteroid.direction = MovingObjectDirection.southeast;
                 } else {
                     asteroid.direction = MovingObjectDirection.northeast;
@@ -251,10 +283,10 @@ class GameEngine {
             let animatedObject = new AnimatedObject('./img/explosion-sprite.png', 100, 100, 74, 9, 1000, true, () => {
                 this.removeGameObject(animatedObject);
             });
-            animatedObject.left = result[i].left;
-            animatedObject.top = result[i].top;
-            animatedObject.width = 25;
-            animatedObject.height = 25;
+            animatedObject.transform.left = result[i].transform.left;
+            animatedObject.transform.top = result[i].transform.top;
+            animatedObject.transform.width = 25;
+            animatedObject.transform.height = 25;
             this.addGameObject(animatedObject);
         }
 
@@ -273,12 +305,12 @@ class GameEngine {
     public isInsideGameArea(gameObject: GameObject): boolean {
         let gameAreaWidth = this.gameArea.width();
         let gameAreaHeight = this.gameArea.height();
-        let goRight = gameObject.left + gameObject.width;
-        let goBottom = gameObject.top + gameObject.height;
+        let goRight = gameObject.transform.left + gameObject.transform.width;
+        let goBottom = gameObject.transform.top + gameObject.transform.height;
 
         return (
-            gameObject.left > 0 && gameObject.left < gameAreaWidth &&
-            gameObject.top > 0 && gameObject.top < gameAreaHeight &&
+            gameObject.transform.left > 0 && gameObject.transform.left < gameAreaWidth &&
+            gameObject.transform.top > 0 && gameObject.transform.top < gameAreaHeight &&
             goRight > 0 && goRight < gameAreaWidth &&
             goBottom > 0 && goBottom < gameAreaHeight
            )

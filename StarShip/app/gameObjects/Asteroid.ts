@@ -4,18 +4,22 @@ class Asteroid extends MovingObject {
     constructor () {
         super();
 
-        this.width = 25;
-        this.height = 25;
+        this.transform.width = 25;
+        this.transform.height = 25;
     }
 
     start() {
         super.start();
-        this.element.addClass('asteroid');
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.addClass('asteroid');
     }
 
     update() {
-        let oldTop = this.top;
-        let oldLeft = this.left;
+        let oldTop = this.transform.top;
+        let oldLeft = this.transform.left;
 
         super.update();
 
@@ -25,18 +29,21 @@ class Asteroid extends MovingObject {
             }
             this.checkCollision = true;
         }
-
-        let gameAreaWidth = this.gameArea.width();
-        let gameAreaHeight = this.gameArea.height();
-        if(this.top < 0 || this.left < 0 || (this.left + this.width) > gameAreaWidth || (this.top + this.height) > gameAreaHeight) {
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        let gameAreaWidth = (renderer as HtmlRenderer).gameArea.width();
+        let gameAreaHeight = (renderer as HtmlRenderer).gameArea.height();
+        if(this.transform.top < 0 || this.transform.left < 0 || (this.transform.left + this.transform.width) > gameAreaWidth || (this.transform.top + this.transform.height) > gameAreaHeight) {
             this.checkRicochet(gameAreaWidth, gameAreaHeight);
-            this.top = oldTop;
-            this.left = oldLeft;
+            this.transform.top = oldTop;
+            this.transform.left = oldLeft;
         }
     };
 
     checkRicochet(gameAreaWidth: number, gameAreaHeight: number){
-        if((this.top + this.height) > gameAreaHeight){
+        if((this.transform.top + this.transform.height) > gameAreaHeight){
             if(this.direction === MovingObjectDirection.southeast) {
                 this.turnLeft(2);
             } else if(this.direction === MovingObjectDirection.south){
@@ -45,7 +52,7 @@ class Asteroid extends MovingObject {
                 this.turnRight(2);
             }
         }
-        if((this.left + this.width) > gameAreaWidth){
+        if((this.transform.left + this.transform.width) > gameAreaWidth){
             if(this.direction === MovingObjectDirection.northeast) {
                 this.turnLeft(2);
             } else if(this.direction === MovingObjectDirection.east){
@@ -54,7 +61,7 @@ class Asteroid extends MovingObject {
                 this.turnRight(2);
             }
         }
-        if(this.top < 0){
+        if(this.transform.top < 0){
             if(this.direction === MovingObjectDirection.northeast) {
                 this.turnRight(2);
             } else if(this.direction === MovingObjectDirection.north){
@@ -63,7 +70,7 @@ class Asteroid extends MovingObject {
                 this.turnLeft(2);
             }
         }
-        if(this.left < 0){
+        if(this.transform.left < 0){
             if(this.direction === MovingObjectDirection.northwest) {
                 this.turnRight(2);
             } else if(this.direction === MovingObjectDirection.west){

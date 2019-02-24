@@ -5,7 +5,7 @@ class LivesObject extends GameObject {
 
     constructor() {
         super();
-        this.width = this.elementWidth * this.lives;
+        this.transform.width = this.elementWidth * this.lives;
     }
 
     public start(){
@@ -15,17 +15,21 @@ class LivesObject extends GameObject {
 
     public draw() {
         super.draw();
+        const renderer = this.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
         if(this.drawnLives === this.lives) {
             return;
         }
-        this.element.empty();
+        (renderer as HtmlRenderer).element.empty();
         for(let i = 0; i < this.lives; i++) {
             let liveElement = $('<div class="livesIndicatorElement"></div>');
             liveElement.css({
                 'left': i * this.elementWidth + 'px'
             });
 
-            this.element.append(liveElement);
+            (renderer as HtmlRenderer).element.append(liveElement);
         }
         this.drawnLives = this.lives;
     }

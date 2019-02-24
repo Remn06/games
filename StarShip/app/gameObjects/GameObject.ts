@@ -1,38 +1,58 @@
-class GameObject {
-    left: number = 0;
-    top: number = 0;
-    width: number = 100;
-    height: number = 100;
+class GameObject implements IComponent{
 
-    protected gameArea: JQuery = $('#gameArea');
-    protected element: JQuery = null;
+    public name: string = null;
+
+    public components: IComponent[] = [];
+
+    public transform: Transform = new Transform();
 
     constructor() {
     }
 
-    start() {
-        this.element = $('<div></div>');
-        this.gameArea.append(this.element);
-        this.element.addClass('gameObject');
-        this.element.css({
-            'width': this.width + 'px',
-            'height': this.height + 'px'
-        });
+    public getComponent(name: string): IComponent {
+        for (let i = 0; i < this.components.length; i++) {
+            if (this.components[i].name === name) {
+                return this.components[i];
+            }
+        }
+        return null;
+    }
 
+    start(): void {
+        if(this.components.length === 0) {
+            const component = new HtmlRenderer(this);
+            component.name = 'HtmlRenderer';
+            this.components.push(component);
+        }
+
+        this.components.forEach(
+            (component) => {
+                component.start();
+            }
+        );
     };
 
-    draw() { //todo check how object is drawing according to its width and height.
-        this.element.css({
-            'left': this.left + 'px',
-            'top': this.top + 'px'
-        });
+    draw() {
+        this.components.forEach(
+            (component) => {
+                component.draw();
+            }
+        );
     };
 
     update() {
-
+        this.components.forEach(
+            (component) => {
+                component.update();
+            }
+        );
     }
 
     destroy() {
-        this.element.remove();
-    };
+        this.components.forEach(
+            (component) => {
+                component.destroy();
+            }
+        );
+    }
 }

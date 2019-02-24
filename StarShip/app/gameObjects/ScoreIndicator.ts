@@ -1,19 +1,30 @@
-class ScoreIndicator extends GameObject {
+class ScoreIndicator implements IComponent {
+
     private score: number = null;
+    protected gameObject: GameObject;
+
+    public name: string;
+
+    constructor(gameObject: GameObject) {
+        this.gameObject = gameObject;
+    }
 
     public start() {
-        super.start();
-        this.element.addClass('scoreIndicator');
+
     }
 
     public draw() {
-        super.draw();
-        this.element.text(this.score.toString());
+        const renderer = this.gameObject.getComponent('HtmlRenderer');
+        if (renderer == null) {
+            return;
+        }
+        (renderer as HtmlRenderer).element.text(this.score.toString());
     }
 
     public update() {
-        super.update();
         this.score = GameManager.instance().getScore();
     }
+    public destroy() {
 
+    }
 }
