@@ -1,0 +1,43 @@
+import { GameObject } from '../../game-structure/game-object';
+import { GameComponent } from '../base/game-component';
+import { Exclude, Expose } from 'class-transformer';
+import { GameObjectRenderInfo } from './game-object-render-info';
+
+@Exclude()
+export class HtmlRendererGameComponent extends GameComponent {
+
+	@Expose()
+	public name = 'HtmlRendererGameComponent';
+
+	@Expose()
+	public className: string;
+
+	public gameObject: GameObject;
+
+	public renderInfo: GameObjectRenderInfo;
+
+	constructor() {
+		super();
+	}
+
+	start(): void {
+		this.renderInfo = GameObjectRenderInfo.fromGameObject(this.gameObject);
+	}
+
+	draw(): void {
+		this.renderInfo.height = this.gameObject.transform.height;
+		this.renderInfo.width = this.gameObject.transform.width;
+		this.renderInfo.left = this.gameObject.transform.position.x;
+		this.renderInfo.top = this.gameObject.transform.position.y;
+		this.renderInfo.rotation = this.gameObject.transform.rotation;
+		this.renderInfo.className = this.className;
+		this.renderInfo.text = this.gameObject.text;
+	}
+
+	update(): void {
+	}
+
+	destroy(): void {
+	}
+}
+
