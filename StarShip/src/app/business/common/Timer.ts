@@ -1,7 +1,7 @@
 import { isNumber } from 'util';
 import { Logger } from './logger';
 import { Subject } from 'rxjs';
-let inc = 0;
+
 export class Timer {
 
 	public static timerEvent: Subject<void> = new Subject();

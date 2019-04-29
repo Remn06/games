@@ -9,7 +9,9 @@ import { ComponentsRegistry } from '../game-components/base/components-registry'
 
 enum ComponentsNames {
 	htmlRendererGameComponent = 'HtmlRendererGameComponent',
-	simpleMoveGameComponent = 'SimpleMoveGameComponent'
+	simpleMoveGameComponent = 'SimpleMoveGameComponent',
+	shiftRightComponent = 'ShiftRightComponent',
+	resetToLeftComponent = 'ResetToLeftComponent'
 }
 
 export class HardcodedGameData {
@@ -46,9 +48,15 @@ export class HardcodedGameData {
 			[
 				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [new NameValuePair('className', 'star-ship')]),
 				HardcodedGameData.getComponent(ComponentsNames.simpleMoveGameComponent, [
-					new NameValuePair('speed', 20),
+					new NameValuePair('speed', 100),
 					new NameValuePair('direction', new Vector2(1, 0.5)),
-				])
+					new NameValuePair('rotation', 90)
+				]),
+				HardcodedGameData.getComponent(ComponentsNames.shiftRightComponent, [
+					new NameValuePair('speed', 100)
+				]),
+				HardcodedGameData.getComponent(ComponentsNames.resetToLeftComponent, [])
+
 			]
 		));
 		scene.gameObjects.push(HardcodedGameData.createGameObject(
