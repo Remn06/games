@@ -26,6 +26,10 @@ export class GameObject {
 	public children: GameObject[] = [];
 
 	@Expose()
+	@Type(() => GameObject)
+	public parent: GameObject = null;
+
+	@Expose()
 	public text: string;
 
 	constructor() {
@@ -48,6 +52,10 @@ export class GameObject {
 				component.start();
 			}
 		);
+
+		this.children.forEach((ch) => {
+			ch.start();
+		});
 	}
 
 	draw() {
@@ -56,6 +64,10 @@ export class GameObject {
 				component.draw();
 			}
 		);
+
+		this.children.forEach((ch) => {
+			ch.draw();
+		});
 	}
 
 	update() {
@@ -64,6 +76,10 @@ export class GameObject {
 				component.update();
 			}
 		);
+
+		this.children.forEach((ch) => {
+			ch.update();
+		});
 	}
 
 	destroy() {
@@ -72,5 +88,9 @@ export class GameObject {
 				component.destroy();
 			}
 		);
+
+		this.children.forEach((ch) => {
+			ch.destroy();
+		});
 	}
 }

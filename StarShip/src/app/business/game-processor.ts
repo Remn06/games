@@ -2,6 +2,11 @@ import { CollisionsPrcessor } from './physics/collisions-prcessor';
 import { GameScene } from './game-structure/game-scene';
 
 export class GameProcessor {
+
+	public static start(currentScene: GameScene): void {
+		currentScene.gameObjects.forEach((go) => { go.start(); });
+	}
+
 	public static process(currentScene: GameScene): void {
 		const gameObjects = currentScene.gameObjects;
 		for (let i = 0; i < gameObjects.length; i++) {

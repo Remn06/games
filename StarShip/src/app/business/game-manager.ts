@@ -5,15 +5,15 @@ import { EventMessage, EventMessageType } from './events/event-message';
 import { Timer } from './common/Timer';
 import { GameProcessor } from './game-processor';
 import { Logger } from './common/logger';
+import { GameScene } from './game-structure/game-scene';
+import { GameEventManager } from './game-event-manager';
 
 export class GameManager {
 	private static gameManagerInstance: GameManager = null;
 
 	private gameData: GameData = null;
-	private currentScene = null;
+	private currentScene: GameScene = null;
 	private timerSubscription: Subscription = null;
-
-	private onGameEventSubject = new BehaviorSubject<EventMessage>(EventMessage.empty());
 
 	/*private gameMenu: GameMenu = null;
 	private gameEngine: GameEngine = null;
@@ -27,37 +27,32 @@ export class GameManager {
 		return GameManager.gameManagerInstance;
 	}
 
-	constructor() {
-		setTimeout(() => this.load(), 0);
-	}
-
 	public load(): void {
-		// todo all this have to be refactored.
-		this.gameData = GameLoader.load();
-		this.currentScene = this.gameData.scenes.find((s) => s.name === this.gameData.defaultSceneName);
-		this.gameData.scenes[0].gameObjects.forEach((go) => { go.start(); });
-		if (this.timerSubscription) {
-			this.timerSubscription.unsubscribe();
-		}
-		this.timerSubscription = Timer.timerEvent.subscribe(() => this.timerEventProcessor());
-		this.onGameEventSubject.next(new EventMessage(EventMessageType.GameStarted, this.currentScene.gameObjects));
-	}
 
-	public gameEvents(): Subject<EventMessage> {
-		return this.onGameEventSubject;
+		this.gameData = GameLoader.load();
+		this.currentScene = this.gameData.scenes[0];
+
+		GameProcessor.start(this.currentScene);
+		this.setTimer();
+		GameEventManager.publish(new EventMessage(EventMessageType.GameStarted, this.currentScene.gameObjects));
 	}
 
 	public destroy(): void {
-		this.onGameEventSubject.complete();
 		if (this.timerSubscription) {
 			this.timerSubscription.unsubscribe();
 		}
 	}
 
-	private timerEventProcessor(): void {
-		GameProcessor.process(this.currentScene);
-		this.onGameEventSubject.next(new EventMessage(EventMessageType.GameUpdate, this.currentScene));
+	private setTimer(): void {
+		if (this.timerSubscription) {
+			this.timerSubscription.unsubscribe();
+		}
+		this.timerSubscription = Timer.timerEvent.subscribe(() => {
+			GameProcessor.process(this.currentScene);
+			GameEventManager.publish(new EventMessage(EventMessageType.GameUpdate, this.currentScene));
+		});
 	}
+
 
 /*
 	  public start() {

@@ -8,4 +8,9 @@ export class GameScene {
   @Expose()
   @Type(() => GameObject)
   public gameObjects: GameObject[];
+
+  constructor(name: string, gameObjects) {
+  	this.name = name;
+  	this.gameObjects = gameObjects;
+  }
 }

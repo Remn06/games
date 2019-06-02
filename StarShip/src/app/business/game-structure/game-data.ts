@@ -6,6 +6,8 @@ export class GameData {
 	@Expose()
 	@Type(() => GameScene)
 	scenes: GameScene[];
-	@Expose()
-	defaultSceneName: string;
+
+	constructor(scenes: GameScene[]) {
+		this.scenes = scenes;
+	}
 }

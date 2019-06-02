@@ -10,7 +10,7 @@ export class HtmlRendererGameComponent extends GameComponent {
 	public name = 'HtmlRendererGameComponent';
 
 	@Expose()
-	public className: string;
+	public backgroundImage: string;
 
 	public gameObject: GameObject;
 
@@ -30,7 +30,7 @@ export class HtmlRendererGameComponent extends GameComponent {
 		this.renderInfo.left = this.gameObject.transform.position.x;
 		this.renderInfo.top = this.gameObject.transform.position.y;
 		this.renderInfo.rotation = this.gameObject.transform.rotation;
-		this.renderInfo.className = this.className;
+		this.renderInfo.backgroundImage = this.backgroundImage;
 		this.renderInfo.text = this.gameObject.text;
 	}
 

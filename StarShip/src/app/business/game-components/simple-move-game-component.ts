@@ -3,7 +3,6 @@ import { Timer } from '../common/Timer';
 import { Vector2 } from '../common/vector2';
 import { Exclude, Expose, Type } from 'class-transformer';
 import { VMath } from '../common/v-math';
-import { ComponentsRegistry } from './base/components-registry';
 
 @Exclude()
 export class SimpleMoveGameComponent extends GameComponent {

@@ -1,10 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { GameObjectRenderInfo } from '../../business/game-components/html-renderer-game-component/game-object-render-info';
-import { GameManager } from '../../business/game-manager';
 import { GameScene } from '../../business/game-structure/game-scene';
 import { HtmlRendererGameComponent } from '../../business/game-components/html-renderer-game-component/html-renderer-game-component';
 import { EventMessage, EventMessageType } from '../../business/events/event-message';
+import { GameObject } from '../../business/game-structure/game-object';
+import { GameEventManager } from '../../business/game-event-manager';
 
 @Injectable({
 	providedIn: 'root'
@@ -14,7 +15,7 @@ export class HtmlRendererService implements OnDestroy {
 	private gameCalculatedSubscription: Subscription;
 
 	constructor() {
-		GameManager.instance().gameEvents().subscribe((eventMessage) => {
+		GameEventManager.events().subscribe((eventMessage) => {
 			this.processEvent(eventMessage);
 		});
 	}
@@ -29,7 +30,10 @@ export class HtmlRendererService implements OnDestroy {
 	}
 
 	private render(gameScene: GameScene): void {
-		const infos = gameScene.gameObjects.map((go) => {
+
+		const allObjects = this.getAllGameObjects(gameScene.gameObjects);
+
+		const infos = allObjects.map((go) => {
 			const renderer = go.getComponent('HtmlRendererGameComponent') as HtmlRendererGameComponent;
 			if (renderer == null) {
 				return;
@@ -37,6 +41,15 @@ export class HtmlRendererService implements OnDestroy {
 			return renderer.renderInfo;
 		});
 		this.subject.next(infos);
+	}
+
+	private getAllGameObjects(gameObjects: GameObject[]): GameObject[] {
+		let res = [];
+		gameObjects.forEach((go) => {
+			const children = this.getAllGameObjects(go.children);
+			res = res.concat(children);
+		});
+		return gameObjects.concat(res);
 	}
 
 	private processEvent(eventMessage: EventMessage): void {

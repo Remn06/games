@@ -17,36 +17,23 @@ enum ComponentsNames {
 export class HardcodedGameData {
 
 	public static getData(): GameData {
-		const gameData = new GameData();
-		gameData.scenes = [];
-		gameData.scenes.push(HardcodedGameData.getScene());
-		gameData.defaultSceneName = gameData.scenes[0].name;
-		return gameData;
+		return new GameData([HardcodedGameData.getScene()]);
 	}
 
 	private static getScene(): GameScene {
-		const scene = new GameScene();
-		scene.name = 'Main Scene';
-		scene.gameObjects = [];
+		const scene = new GameScene('Main Scene', []);
 		HardcodedGameData.fillWithGameObjects(scene);
-		HardcodedGameData.setLinks(scene.gameObjects);
 		return scene;
 	}
 
-	private static setLinks(gameObjects: GameObject[]): void {
-		gameObjects.forEach((go) => {
-			go.components.forEach((c) => {
-				c.gameObject = go;
-			});
-		});
-	}
-
 	private static fillWithGameObjects(scene: GameScene): void {
-		scene.gameObjects.push(HardcodedGameData.createGameObject(
-			'GameObject',
+		scene.gameObjects.push(HardcodedGameData.createGameObject( null,
+			'StarShip',
 			HardcodedGameData.createTransform(new Vector2(300, 100), 100, 100, 0),
 			[
-				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [new NameValuePair('className', 'star-ship')]),
+				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
+					new NameValuePair('backgroundImage', 'url("assets/img/cruiser.png")')
+				]),
 				HardcodedGameData.getComponent(ComponentsNames.simpleMoveGameComponent, [
 					new NameValuePair('speed', 100),
 					new NameValuePair('direction', new Vector2(1, 0.5)),
@@ -56,17 +43,22 @@ export class HardcodedGameData {
 					new NameValuePair('speed', 100)
 				]),
 				HardcodedGameData.getComponent(ComponentsNames.resetToLeftComponent, [])
-
 			]
 		));
-		scene.gameObjects.push(HardcodedGameData.createGameObject(
-			'GameObject1',
-			HardcodedGameData.createTransform(new Vector2(100, 100), 100, 100, 0),
-			[ HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [new NameValuePair('className', 'game-object')]) ]
-		));
+		const bullet = HardcodedGameData.createGameObject(
+			scene.gameObjects[0],
+			'Bullet',
+			HardcodedGameData.createTransform(new Vector2(20, 20), 10, 10, 0),
+			[
+				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
+					new NameValuePair('backgroundImage', 'url("assets/img/bullet.png")')
+				])
+			]
+		);
+		scene.gameObjects[0].children.push(bullet);
 	}
 
-	private static createGameObject(name: string, transform: Transform, components: GameComponent[]): GameObject {
+	private static createGameObject(parent: GameObject, name: string, transform: Transform, components: GameComponent[]): GameObject {
 		const gameObject = new GameObject();
 		gameObject.name = name;
 		gameObject.transform = transform;
@@ -76,16 +68,13 @@ export class HardcodedGameData {
 			}
 		});
 		gameObject.components = components;
+		gameObject.transform.gameObject = gameObject;
+		gameObject.parent = parent;
 		return gameObject;
 	}
 
 	private static createTransform(position: Vector2, width: number, height: number, rotation: number): Transform {
-		const transform = new Transform();
-		transform.position = position;
-		transform.width = width;
-		transform.height = height;
-		transform.rotation = rotation;
-		return transform;
+		return Transform.Instantiate(position, rotation, width, height);
 	}
 
 	public static getComponent(componentName: ComponentsNames, params: NameValuePair[]): GameComponent {

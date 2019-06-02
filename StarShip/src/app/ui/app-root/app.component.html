@@ -1,13 +1,5 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div id="gameMenu" class="gameMenuBlock">
-  <button id='startGameButton' class="gameMenuButton">Start New Game</button>
-  <button id='resumeGameButton' class="gameMenuButton">Resume Game</button>
-</div>
 <div id="gameArea" class="gameArea" [ngStyle]="{'width': width, 'height': height}">
-  <app-game-object
-	  *ngFor="let renderInfo of gameObjectsRenderInfos; trackBy: id"
-	  [gameObjectRenderInfo]="renderInfo">
-  </app-game-object>
+	<app-html-renderer></app-html-renderer>
 </div>
 
 <router-outlet></router-outlet>

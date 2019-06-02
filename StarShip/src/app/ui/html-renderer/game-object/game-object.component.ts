@@ -23,7 +23,8 @@ export class GameObjectComponent implements OnInit {
 			height: this.gameObjectRenderInfo.height + 'px',
 			left: this.gameObjectRenderInfo.left + 'px',
 			top: this.gameObjectRenderInfo.top + 'px',
-			transform: `rotate(${this.gameObjectRenderInfo.rotation}deg)`
+			transform: `rotate(${this.gameObjectRenderInfo.rotation}deg)`,
+			'background-image': this.gameObjectRenderInfo.backgroundImage
 		};
 	}
 
