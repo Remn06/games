@@ -46,10 +46,14 @@ export class HtmlRendererService implements OnDestroy {
 	private getAllGameObjects(gameObjects: GameObject[]): GameObject[] {
 		let res = [];
 		gameObjects.forEach((go) => {
+			if (!go.active) {
+				return;
+			}
+			res.push(go)
 			const children = this.getAllGameObjects(go.children);
 			res = res.concat(children);
 		});
-		return gameObjects.concat(res);
+		return res;
 	}
 
 	private processEvent(eventMessage: EventMessage): void {

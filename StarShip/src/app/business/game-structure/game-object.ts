@@ -11,9 +11,6 @@ export class GameObject {
 	public name: string = null;
 
 	@Expose()
-	public enabled = true;
-
-	@Expose()
 	@TransformAttr(value => ComponentBuilder.build(value), {toClassOnly: true})
 	public components: GameComponent[] = [];
 
@@ -31,6 +28,9 @@ export class GameObject {
 
 	@Expose()
 	public text: string;
+
+	@Expose()
+	public active: boolean;
 
 	constructor() {
 	}

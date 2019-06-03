@@ -3,6 +3,10 @@ import { Exclude, Expose } from 'class-transformer';
 @Exclude()
 export class Vector2 {
 
+	public static get zero() {
+		return new Vector2(0, 0);
+	}
+
 	@Expose()
 	public x: number;
 	@Expose()

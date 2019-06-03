@@ -1,14 +1,20 @@
 import { GameObject } from '../../game-structure/game-object';
 import { Exclude, Expose } from 'class-transformer';
 
+export interface IGameComponent {
+	name: string;
+	active: boolean;
+	gameObject: GameObject;
+}
+
 @Exclude()
-export abstract class GameComponent {
+export abstract class GameComponent implements IGameComponent{
 
 	@Expose()
 	name: string;
 
 	@Expose()
-	enabled = true;
+	active: boolean;
 
 	gameObject: GameObject;
 

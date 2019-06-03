@@ -8,7 +8,7 @@ export class GameProcessor {
 	}
 
 	public static process(currentScene: GameScene): void {
-		const gameObjects = currentScene.gameObjects;
+		const gameObjects = currentScene.gameObjects.filter((g) => g.active);
 		for (let i = 0; i < gameObjects.length; i++) {
 			gameObjects[i].update();
 		}
