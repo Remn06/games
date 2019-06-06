@@ -16,9 +16,9 @@ export class ShiftRightComponent extends GameComponent {
 	}
 
 	update(): void {
-		const x = this.gameObject.transform.position.x + this.speed * Timer.delta;
-		const y = this.gameObject.transform.position.y;
-		this.gameObject.transform.position = new Vector2(x, y);
+		const x = this.gameObject.transform.localPosition.x + this.speed * Timer.delta;
+		const y = this.gameObject.transform.localPosition.y;
+		this.gameObject.transform.localPosition = new Vector2(x, y);
 	}
 
 	destroy(): void {

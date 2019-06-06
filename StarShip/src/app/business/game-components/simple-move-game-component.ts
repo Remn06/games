@@ -30,13 +30,13 @@ export class SimpleMoveGameComponent extends GameComponent {
 		if (angle > 360) {
 			angle = angle - 360;
 		}
-		const position = this.gameObject.transform.position;
+		const position = this.gameObject.transform.localPosition;
 
 		const direction = VMath.rotate(new Vector2(1, 0), angle);
 
-		// important!!! first set the position then rotation, because rotation recalculate position for the children.
-		this.gameObject.transform.position = VMath.add(position, VMath.multiply(direction, this.speed * Timer.delta));
-		this.gameObject.transform.rotation = angle;
+
+		this.gameObject.transform.localPosition = VMath.add(position, VMath.multiply(direction, this.speed * Timer.delta));
+		this.gameObject.transform.localRotation = angle;
 	}
 
 	destroy(): void {

@@ -11,7 +11,8 @@ enum ComponentsNames {
 	htmlRendererGameComponent = 'HtmlRendererGameComponent',
 	simpleMoveGameComponent = 'SimpleMoveGameComponent',
 	shiftRightComponent = 'ShiftRightComponent',
-	resetToLeftComponent = 'ResetToLeftComponent'
+	resetToLeftComponent = 'ResetToLeftComponent',
+	rotateComponent = 'RotateComponent'
 }
 
 export class HardcodedGameData {
@@ -29,19 +30,19 @@ export class HardcodedGameData {
 	private static fillWithGameObjects(scene: GameScene): void {
 		const starShip = HardcodedGameData.createGameObject( null,
 			'StarShip',
-			HardcodedGameData.createTransform(new Vector2(300, 100), 100, 100, 0),
+			HardcodedGameData.createTransform(new Vector2(100, 100), 100, 100, 0),
 			[
 				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
-					new NameValuePair('backgroundImage', 'url("assets/img/cruiser.png")')
+					new NameValuePair('backgroundImage', 'url("assets/img/death-star.png")')
 				], true),
 				HardcodedGameData.getComponent(ComponentsNames.simpleMoveGameComponent, [
-					new NameValuePair('speed', 0),
+					new NameValuePair('speed', 100),
 					new NameValuePair('direction', new Vector2(1, 0.5)),
-					new NameValuePair('rotation', 90)
+					new NameValuePair('rotation', 45)
 				], true),
-				/*HardcodedGameData.getComponent(ComponentsNames.shiftRightComponent, [
+				HardcodedGameData.getComponent(ComponentsNames.shiftRightComponent, [
 					new NameValuePair('speed', 100)
-				], true),*/
+				], true),
 				HardcodedGameData.getComponent(ComponentsNames.resetToLeftComponent, [], true)
 			],
 			true
@@ -50,10 +51,13 @@ export class HardcodedGameData {
 		const bullet = HardcodedGameData.createGameObject(
 			scene.gameObjects[0],
 			'Satellite',
-			HardcodedGameData.createChildTransform(starShip.transform.position, new Vector2(50, 0), 10, 10, 0),
+			HardcodedGameData.createChildTransform(starShip.transform, new Vector2(0, 70), 20, 20, 180),
 			[
 				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
 					new NameValuePair('backgroundImage', 'url("assets/img/cruiser.png")')
+				], true),
+				HardcodedGameData.getComponent(ComponentsNames.rotateComponent, [
+					new NameValuePair('rotation', 90)
 				], true)
 			],
 			true
@@ -87,8 +91,13 @@ export class HardcodedGameData {
 		return Transform.instantiate(position, rotation, width, height);
 	}
 
-	private static createChildTransform(parentPosition: Vector2, localPosition: Vector2, width: number, height: number, rotation: number): Transform {
-		return Transform.instantiateChild(parentPosition, localPosition, rotation, width, height);
+	private static createChildTransform(
+			parent: Transform,
+			localPosition: Vector2,
+			width: number,
+			height: number,
+			rotation: number): Transform {
+		return Transform.instantiateChild(parent, localPosition, rotation, width, height);
 	}
 
 

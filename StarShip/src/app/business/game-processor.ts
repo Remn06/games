@@ -1,5 +1,6 @@
 import { CollisionsPrcessor } from './physics/collisions-prcessor';
 import { GameScene } from './game-structure/game-scene';
+import { TransformCalculateSystem } from './core/TransformCalculateSystem';
 
 export class GameProcessor {
 
@@ -12,6 +13,8 @@ export class GameProcessor {
 		for (let i = 0; i < gameObjects.length; i++) {
 			gameObjects[i].update();
 		}
+
+		TransformCalculateSystem.instance().update();
 
 		CollisionsPrcessor.checkCollisions(gameObjects);
 

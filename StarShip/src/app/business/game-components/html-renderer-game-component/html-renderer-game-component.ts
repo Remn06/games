@@ -27,8 +27,8 @@ export class HtmlRendererGameComponent extends GameComponent {
 	draw(): void {
 		this.renderInfo.height = this.gameObject.transform.height;
 		this.renderInfo.width = this.gameObject.transform.width;
-		this.renderInfo.left = this.gameObject.transform.position.x;
-		this.renderInfo.top = this.gameObject.transform.position.y;
+		this.renderInfo.left = this.gameObject.transform.position.x - (this.gameObject.transform.width / 2);
+		this.renderInfo.top = this.gameObject.transform.position.y - (this.gameObject.transform.height / 2);
 		this.renderInfo.rotation = this.gameObject.transform.rotation;
 		this.renderInfo.backgroundImage = this.backgroundImage;
 		this.renderInfo.text = this.gameObject.text;
