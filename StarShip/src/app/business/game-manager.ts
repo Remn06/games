@@ -2,7 +2,7 @@ import { GameLoader } from './game-loader/game-loader';
 import { GameData } from './game-structure/game-data';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { EventMessage, EventMessageType } from './events/event-message';
-import { Timer } from './common/Timer';
+import { Timer } from './common/timer';
 import { GameProcessor } from './game-processor';
 import { Logger } from './common/logger';
 import { GameScene } from './game-structure/game-scene';

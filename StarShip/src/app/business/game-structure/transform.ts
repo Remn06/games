@@ -2,7 +2,7 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { Vector2 } from '../common/vector2';
 import { GameObject } from './game-object';
 import { VMath } from '../common/v-math';
-import { TransformCalculateSystem } from '../core/TransformCalculateSystem';
+import { TransformCalculateSystem } from '../core/transform-calculate-system';
 
 @Exclude()
 export class Transform {

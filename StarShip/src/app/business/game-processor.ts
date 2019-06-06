@@ -1,6 +1,6 @@
 import { CollisionsPrcessor } from './physics/collisions-prcessor';
 import { GameScene } from './game-structure/game-scene';
-import { TransformCalculateSystem } from './core/TransformCalculateSystem';
+import { TransformCalculateSystem } from './core/transform-calculate-system';
 
 export class GameProcessor {
 

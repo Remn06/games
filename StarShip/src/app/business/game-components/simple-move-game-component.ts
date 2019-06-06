@@ -1,5 +1,5 @@
 import { GameComponent } from './base/game-component';
-import { Timer } from '../common/Timer';
+import { Timer } from '../common/timer';
 import { Vector2 } from '../common/vector2';
 import { Exclude, Expose, Type } from 'class-transformer';
 import { VMath } from '../common/v-math';

@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { GameComponent } from './base/game-component';
-import { Timer } from '../common/Timer';
+import { Timer } from '../common/timer';
 import { VMath } from '../common/v-math';
 
 @Exclude()
