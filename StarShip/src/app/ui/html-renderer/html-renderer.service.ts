@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { GameObjectRenderInfo } from '../../business/game-components/html-renderer-game-component/game-object-render-info';
+import { GameObjectRenderInfo } from '../../business/game-components/core/html-renderer-game-component/game-object-render-info';
 import { GameScene } from '../../business/game-structure/game-scene';
-import { HtmlRendererGameComponent } from '../../business/game-components/html-renderer-game-component/html-renderer-game-component';
+import { HtmlRendererGameComponent } from '../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
 import { EventMessage, EventMessageType } from '../../business/events/event-message';
 import { GameObject } from '../../business/game-structure/game-object';
 import { GameEventManager } from '../../business/game-event-manager';

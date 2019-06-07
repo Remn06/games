@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
-import { GameComponent } from './base/game-component';
-import { Timer } from '../common/timer';
-import { VMath } from '../common/v-math';
+import { GameComponent } from '../core/base/game-component';
+import { Timer } from '../../common/timer';
+import { VMath } from '../../common/v-math';
 
 @Exclude()
 export class RotateComponent extends GameComponent {

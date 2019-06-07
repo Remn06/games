@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from './base/game-component';
-import { Vector2 } from '../common/vector2';
+import { GameComponent } from '../core/base/game-component';
+import { Vector2 } from '../../common/vector2';
 
 @Exclude()
 export class ResetToLeftComponent extends GameComponent {

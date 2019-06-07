@@ -1,6 +1,7 @@
 import { CollisionsPrcessor } from './physics/collisions-prcessor';
 import { GameScene } from './game-structure/game-scene';
 import { TransformCalculateSystem } from './core/transform-calculate-system';
+import { Input } from './input/input';
 
 export class GameProcessor {
 
@@ -21,5 +22,7 @@ export class GameProcessor {
 		for (let i = 0; i < gameObjects.length; i++) {
 			gameObjects[i].draw();
 		}
+
+		Input.frameEnd();
 	}
 }

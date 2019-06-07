@@ -1,4 +1,4 @@
-import { GameObject } from '../../game-structure/game-object';
+import { GameObject } from '../../../game-structure/game-object';
 import { Exclude, Expose } from 'class-transformer';
 
 export interface IGameComponent {

@@ -2,17 +2,18 @@ import { GameScene } from '../game-structure/game-scene';
 import { GameObject } from '../game-structure/game-object';
 import { Vector2 } from '../common/vector2';
 import { Transform } from '../game-structure/transform';
-import { GameComponent, IGameComponent } from '../game-components/base/game-component';
+import { GameComponent, IGameComponent } from '../game-components/core/base/game-component';
 import { NameValuePair } from '../common/name-value-pair';
 import { GameData } from '../game-structure/game-data';
-import { ComponentsRegistry } from '../game-components/base/components-registry';
+import { ComponentsRegistry } from '../game-components/core/base/components-registry';
 
 enum ComponentsNames {
 	htmlRendererGameComponent = 'HtmlRendererGameComponent',
 	simpleMoveGameComponent = 'SimpleMoveGameComponent',
 	shiftRightComponent = 'ShiftRightComponent',
 	resetToLeftComponent = 'ResetToLeftComponent',
-	rotateComponent = 'RotateComponent'
+	rotateComponent = 'RotateComponent',
+	showHideGameObjectComponent = 'ShowHideGameObjectComponent'
 }
 
 export class HardcodedGameData {
@@ -48,6 +49,7 @@ export class HardcodedGameData {
 			true
 		);
 		scene.gameObjects.push(starShip);
+
 		const bullet = HardcodedGameData.createGameObject(
 			scene.gameObjects[0],
 			'Satellite',
@@ -63,6 +65,11 @@ export class HardcodedGameData {
 			true
 		);
 		scene.gameObjects[0].children.push(bullet);
+
+		const shComponent = HardcodedGameData.getComponent(ComponentsNames.showHideGameObjectComponent, [], true);
+		(shComponent as any).gameObjectToHide = bullet;
+		starShip.components.push(shComponent);
+
 	}
 
 	private static createGameObject(

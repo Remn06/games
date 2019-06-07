@@ -1,8 +1,8 @@
-import { GameComponent } from './base/game-component';
-import { Timer } from '../common/timer';
-import { Vector2 } from '../common/vector2';
+import { GameComponent } from '../core/base/game-component';
+import { Timer } from '../../common/timer';
+import { Vector2 } from '../../common/vector2';
 import { Exclude, Expose, Type } from 'class-transformer';
-import { VMath } from '../common/v-math';
+import { VMath } from '../../common/v-math';
 
 @Exclude()
 export class SimpleMoveGameComponent extends GameComponent {

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { GameObjectRenderInfo } from '../../../business/game-components/html-renderer-game-component/game-object-render-info';
+import { GameObjectRenderInfo } from '../../../business/game-components/core/html-renderer-game-component/game-object-render-info';
 
 @Component({
 	selector: 'app-game-object',

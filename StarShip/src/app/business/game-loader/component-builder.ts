@@ -1,5 +1,5 @@
-import { GameComponent } from '../game-components/base/game-component';
-import { ComponentsRegistry } from '../game-components/base/components-registry';
+import { GameComponent } from '../game-components/core/base/game-component';
+import { ComponentsRegistry } from '../game-components/core/base/components-registry';
 import { plainToClass } from 'class-transformer';
 
 export class ComponentBuilder {

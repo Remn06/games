@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from './base/game-component';
-import { Timer } from '../common/timer';
-import { Vector2 } from '../common/vector2';
+import { GameComponent } from '../core/base/game-component';
+import { Timer } from '../../common/timer';
+import { Vector2 } from '../../common/vector2';
 
 @Exclude()
 export class ShiftRightComponent extends GameComponent {

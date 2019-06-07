@@ -1,4 +1,4 @@
-import { GameObject } from '../../game-structure/game-object';
+import { GameObject } from '../../../game-structure/game-object';
 import { GameComponent } from '../base/game-component';
 import { Exclude, Expose } from 'class-transformer';
 import { GameObjectRenderInfo } from './game-object-render-info';

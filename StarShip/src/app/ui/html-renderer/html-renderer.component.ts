@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
-import { GameObjectRenderInfo } from '../../business/game-components/html-renderer-game-component/game-object-render-info';
+import { GameObjectRenderInfo } from '../../business/game-components/core/html-renderer-game-component/game-object-render-info';
 import { Subscription } from 'rxjs';
 import { HtmlRendererService } from './html-renderer.service';
 import { GameManager } from '../../business/game-manager';

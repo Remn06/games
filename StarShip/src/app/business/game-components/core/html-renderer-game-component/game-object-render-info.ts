@@ -1,5 +1,5 @@
-import { GameObject } from '../../game-structure/game-object';
-import { Guid } from '../../common/guid';
+import { GameObject } from '../../../game-structure/game-object';
+import { Guid } from '../../../common/guid';
 
 export class GameObjectRenderInfo {
 	public id: string = null;

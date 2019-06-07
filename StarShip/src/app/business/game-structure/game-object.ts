@@ -1,8 +1,8 @@
 import { Exclude, Expose, Transform as TransformAttr, Type } from 'class-transformer';
 import { Transform } from './transform';
-import { GameComponent } from '../game-components/base/game-component';
+import { GameComponent } from '../game-components/core/base/game-component';
 import { ComponentBuilder } from '../game-loader/component-builder';
-import { HtmlRendererGameComponent } from '../game-components/html-renderer-game-component/html-renderer-game-component';
+import { HtmlRendererGameComponent } from '../game-components/core/html-renderer-game-component/html-renderer-game-component';
 
 @Exclude()
 export class GameObject {
