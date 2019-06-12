@@ -12,6 +12,9 @@ export class HtmlRendererGameComponent extends GameComponent {
 	@Expose()
 	public backgroundImage: string;
 
+	@Expose()
+	public cssStyle: string;
+
 	public gameObject: GameObject;
 
 	public renderInfo: GameObjectRenderInfo;
@@ -32,6 +35,7 @@ export class HtmlRendererGameComponent extends GameComponent {
 		this.renderInfo.rotation = this.gameObject.transform.rotation;
 		this.renderInfo.backgroundImage = this.backgroundImage;
 		this.renderInfo.text = this.gameObject.text;
+		this.renderInfo.cssStyle = this.cssStyle;
 	}
 
 	update(): void {

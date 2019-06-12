@@ -13,7 +13,8 @@ enum ComponentsNames {
 	shiftRightComponent = 'ShiftRightComponent',
 	resetToLeftComponent = 'ResetToLeftComponent',
 	rotateComponent = 'RotateComponent',
-	showHideGameObjectComponent = 'ShowHideGameObjectComponent'
+	showHideGameObjectComponent = 'ShowHideGameObjectComponent',
+	TestOneComponent = 'TestOneComponent'
 }
 
 export class HardcodedGameData {
@@ -34,7 +35,8 @@ export class HardcodedGameData {
 			HardcodedGameData.createTransform(new Vector2(100, 100), 100, 100, 0),
 			[
 				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
-					new NameValuePair('backgroundImage', 'url("assets/img/death-star.png")')
+					new NameValuePair('backgroundImage', 'url("assets/img/death-star.png")'),
+					new NameValuePair('cssStyle', 'color: white; font-size: 40px;')
 				], true),
 				HardcodedGameData.getComponent(ComponentsNames.simpleMoveGameComponent, [
 					new NameValuePair('speed', 100),
@@ -46,7 +48,8 @@ export class HardcodedGameData {
 				], true),
 				HardcodedGameData.getComponent(ComponentsNames.resetToLeftComponent, [], true)
 			],
-			true
+			true,
+			'Mighty Death Star!'
 		);
 		scene.gameObjects.push(starShip);
 
@@ -70,6 +73,64 @@ export class HardcodedGameData {
 		(shComponent as any).gameObjectToHide = bullet;
 		starShip.components.push(shComponent);
 
+/*
+		const buttonOne = HardcodedGameData.createGameObject(null,
+			'Button One',
+			HardcodedGameData.createTransform(new Vector2(10, 200), 150, 30, 0),
+			[
+				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
+					new NameValuePair('cssStyle', 'color: white; font-size: 25px; background-color: #555; text-align: center; padding: 5px;')
+				], true),
+				HardcodedGameData.getComponent(ComponentsNames.TestOneComponent, [
+					new NameValuePair('speed', 150),
+					new NameValuePair('startX', -175),
+					new NameValuePair('stopX', 90)
+				], true)
+			],
+			true,
+			'Button One'
+		);
+
+		scene.gameObjects.push(buttonOne);
+
+		const buttonTwo = HardcodedGameData.createGameObject(null,
+			'Button One',
+			HardcodedGameData.createTransform(new Vector2(10, 250), 150, 30, 0),
+			[
+				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
+					new NameValuePair('cssStyle', 'color: white; font-size: 25px; background-color: #555; text-align: center; padding: 5px;')
+				], true),
+				HardcodedGameData.getComponent(ComponentsNames.TestOneComponent, [
+					new NameValuePair('speed', 150),
+					new NameValuePair('startX', -200),
+					new NameValuePair('stopX', 90)
+				], true)
+			],
+			true,
+			'Button One'
+		);
+
+		scene.gameObjects.push(buttonTwo);
+
+		const buttonThree = HardcodedGameData.createGameObject(null,
+			'Button One',
+			HardcodedGameData.createTransform(new Vector2(10, 300), 150, 30, 0),
+			[
+				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
+					new NameValuePair('cssStyle', 'color: white; font-size: 25px; background-color: #555; text-align: center; padding: 5px;')
+				], true),
+				HardcodedGameData.getComponent(ComponentsNames.TestOneComponent, [
+					new NameValuePair('speed', 150),
+					new NameValuePair('startX', -225),
+					new NameValuePair('stopX', 90)
+				], true)
+			],
+			true,
+			'Button One'
+		);
+
+		scene.gameObjects.push(buttonThree);
+		*/
 	}
 
 	private static createGameObject(
@@ -77,7 +138,7 @@ export class HardcodedGameData {
 			name: string,
 			transform: Transform,
 			components: GameComponent[],
-			active: boolean): GameObject {
+			active: boolean, text: string = null): GameObject {
 
 		const gameObject = new GameObject();
 		gameObject.name = name;
@@ -91,6 +152,7 @@ export class HardcodedGameData {
 		gameObject.transform.gameObject = gameObject;
 		gameObject.parent = parent;
 		gameObject.active = active;
+		gameObject.text = text;
 		return gameObject;
 	}
 

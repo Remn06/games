@@ -10,6 +10,7 @@ export class GameObjectRenderInfo {
 	public rotation: number = null;
 	public backgroundImage: string = null;
 	public text: string = null;
+	public cssStyle: string = null;
 
 	public static fromGameObject(gameObject: GameObject): GameObjectRenderInfo {
 		return {
@@ -20,7 +21,8 @@ export class GameObjectRenderInfo {
 			height: gameObject.transform.height,
 			rotation: gameObject.transform.rotation,
 			backgroundImage: null,
-			text: null
+			text: null,
+			cssStyle: null
 		};
 	}
 }

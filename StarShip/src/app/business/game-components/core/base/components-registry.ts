@@ -4,6 +4,7 @@ import { ShiftRightComponent } from '../../user/shift-right.component';
 import { ResetToLeftComponent } from '../../user/reset-to-left.component';
 import { RotateComponent } from '../../user/rotate.component';
 import { ShowHideGameObjectComponent } from '../../user/show-hide-game-object-component';
+import { TestOneComponent } from '../../user/test-one-component';
 
 export class ComponentsRegistry {
 	public static registry = new Map<string, () => any>();
@@ -15,5 +16,7 @@ ComponentsRegistry.registry.set('HtmlRendererGameComponent', () => HtmlRendererG
 ComponentsRegistry.registry.set('ResetToLeftComponent', () => ResetToLeftComponent);
 ComponentsRegistry.registry.set('RotateComponent', () => RotateComponent);
 ComponentsRegistry.registry.set('ShowHideGameObjectComponent', () => ShowHideGameObjectComponent);
+ComponentsRegistry.registry.set('TestOneComponent', () => TestOneComponent);
+
 
 
