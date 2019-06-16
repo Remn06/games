@@ -20,7 +20,11 @@ enum ComponentsNames {
 export class HardcodedGameData {
 
 	public static getData(): GameData {
-		return new GameData([HardcodedGameData.getScene()]);
+		return new GameData(
+			[
+				HardcodedGameData.getScene()
+			]
+		);
 	}
 
 	private static getScene(): GameScene {
@@ -72,6 +76,37 @@ export class HardcodedGameData {
 		const shComponent = HardcodedGameData.getComponent(ComponentsNames.showHideGameObjectComponent, [], true);
 		(shComponent as any).gameObjectToHide = bullet;
 		starShip.components.push(shComponent);
+
+		/*function getIntNumber() {
+			return 5;
+		}
+
+		function setNumber(numb: number, s: string){
+			let b = numb;
+		}
+
+		let a = getIntNumber();
+		let b = 9;
+
+		setNumber(5);
+		setNumber(a);
+		setNumber(b);
+		setNumber(getIntNumber(), 'ddd');*/
+
+		const button = HardcodedGameData.createGameObject(
+			null,
+			'Button 1',
+			HardcodedGameData.createTransform(new Vector2(500, 300), 150, 25, 0),
+			[
+				HardcodedGameData.getComponent(ComponentsNames.htmlRendererGameComponent, [
+					new NameValuePair('cssStyle', 'color: #aaa; font-size: 20px, padding: 5px; text-align: center;'),
+					new NameValuePair('backgroundImage', 'url("assets/img/button-one.png")')
+				], true)
+			],
+			true,
+			'BUTTON ONE!!!'
+		);
+		scene.gameObjects.push(button);
 
 /*
 		const buttonOne = HardcodedGameData.createGameObject(null,
