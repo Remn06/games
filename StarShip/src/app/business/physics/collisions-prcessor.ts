@@ -1,7 +1,7 @@
 import { GameObject } from '../game-structure/game-object';
 
 export class CollisionsPrcessor {
-	public static checkCollisions(gameObjects: GameObject[]): void { /*
+	public static checkCollisions(rootGameObject: GameObject): void { /*
 		let intersectObjects: IntersectObject[] = [];
 		for(let i = 0; i < this.gameObjects.length; i++){
 			if(this.gameObjects[i] instanceof IntersectObject){

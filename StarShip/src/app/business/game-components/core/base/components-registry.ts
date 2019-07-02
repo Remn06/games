@@ -10,7 +10,7 @@ export class ComponentsRegistry {
 	public static registry = new Map<string, () => any>();
 }
 
-ComponentsRegistry.registry.set('ShiftRightComponent', () => ShiftRightComponent);
+ComponentsRegistry.registry.set(ShiftRightComponent.name, () => ShiftRightComponent);
 ComponentsRegistry.registry.set('SimpleMoveGameComponent', () => SimpleMoveGameComponent);
 ComponentsRegistry.registry.set('HtmlRendererGameComponent', () => HtmlRendererGameComponent);
 ComponentsRegistry.registry.set('ResetToLeftComponent', () => ResetToLeftComponent);

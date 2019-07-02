@@ -6,6 +6,8 @@ import { Input } from '../../input/input';
 @Exclude()
 export class ShowHideGameObjectComponent extends GameComponent {
 
+	public name = ShowHideGameObjectComponent.name;
+
 	public gameObjectToHide: GameObject;
 
 	start(): void {

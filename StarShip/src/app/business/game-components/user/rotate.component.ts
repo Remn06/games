@@ -6,6 +6,8 @@ import { VMath } from '../../common/v-math';
 @Exclude()
 export class RotateComponent extends GameComponent {
 
+	public name = RotateComponent.name;
+
 	public rotation = 90;
 
 	start(): void {

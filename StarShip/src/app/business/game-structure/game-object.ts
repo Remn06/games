@@ -2,7 +2,6 @@ import { Exclude, Expose, Transform as TransformAttr, Type } from 'class-transfo
 import { Transform } from './transform';
 import { GameComponent } from '../game-components/core/base/game-component';
 import { ComponentBuilder } from '../game-loader/component-builder';
-import { HtmlRendererGameComponent } from '../game-components/core/html-renderer-game-component/html-renderer-game-component';
 
 @Exclude()
 export class GameObject {
@@ -40,13 +39,6 @@ export class GameObject {
 	}
 
 	start(): void {
-		if (this.components.length === 0) {
-			const component = new HtmlRendererGameComponent();
-			component.name = 'HtmlRendererGameComponent';
-			component.gameObject = this;
-			this.components.push(component);
-		}
-
 		this.components.forEach(
 			(component) => {
 				component.start();
@@ -59,8 +51,15 @@ export class GameObject {
 	}
 
 	draw() {
+		if (!this.active) {
+			return;
+		}
+
 		this.components.forEach(
 			(component) => {
+				if (!component.active) {
+					return;
+				}
 				component.draw();
 			}
 		);
@@ -71,8 +70,15 @@ export class GameObject {
 	}
 
 	update() {
+		if (!this.active) {
+			return;
+		}
+
 		this.components.forEach(
 			(component) => {
+				if (!component.active) {
+					return;
+				}
 				component.update();
 			}
 		);

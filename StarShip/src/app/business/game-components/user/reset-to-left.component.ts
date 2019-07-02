@@ -5,6 +5,8 @@ import { Vector2 } from '../../common/vector2';
 @Exclude()
 export class ResetToLeftComponent extends GameComponent {
 
+	public name = ResetToLeftComponent.name;
+
 	start(): void {
 	}
 

@@ -7,10 +7,10 @@ export class GameScene {
   public name: string;
   @Expose()
   @Type(() => GameObject)
-  public gameObjects: GameObject[];
+  public rootGameObject: GameObject;
 
-  constructor(name: string, gameObjects) {
+  constructor(name: string, gameObject: GameObject) {
   	this.name = name;
-  	this.gameObjects = gameObjects;
+  	this.rootGameObject = gameObject;
   }
 }

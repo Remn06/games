@@ -31,7 +31,7 @@ export class HtmlRendererService implements OnDestroy {
 
 	private render(gameScene: GameScene): void {
 
-		const allObjects = this.getAllGameObjects(gameScene.gameObjects);
+		const allObjects = this.getAllGameObjects(gameScene.rootGameObject.children);
 
 		const infos = allObjects.map((go) => {
 			const renderer = go.getComponent('HtmlRendererGameComponent') as HtmlRendererGameComponent;
@@ -49,7 +49,7 @@ export class HtmlRendererService implements OnDestroy {
 			if (!go.active) {
 				return;
 			}
-			res.push(go)
+			res.push(go);
 			const children = this.getAllGameObjects(go.children);
 			res = res.concat(children);
 		});

@@ -6,6 +6,8 @@ import { Vector2 } from '../../common/vector2';
 @Exclude()
 export class ShiftRightComponent extends GameComponent {
 
+	public name = ShiftRightComponent.name;
+
 	@Expose()
 	public speed = null;
 

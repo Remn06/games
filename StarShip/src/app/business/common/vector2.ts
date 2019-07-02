@@ -7,6 +7,10 @@ export class Vector2 {
 		return new Vector2(0, 0);
 	}
 
+	public static get one() {
+		return new Vector2(1, 1);
+	}
+
 	@Expose()
 	public x: number;
 	@Expose()

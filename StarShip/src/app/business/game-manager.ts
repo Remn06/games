@@ -1,10 +1,9 @@
 import { GameLoader } from './game-loader/game-loader';
 import { GameData } from './game-structure/game-data';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { EventMessage, EventMessageType } from './events/event-message';
 import { Timer } from './common/timer';
 import { GameProcessor } from './game-processor';
-import { Logger } from './common/logger';
 import { GameScene } from './game-structure/game-scene';
 import { GameEventManager } from './game-event-manager';
 
@@ -26,10 +25,8 @@ export class GameManager {
 
 		this.gameData = GameLoader.load();
 		this.currentScene = this.gameData.scenes[0];
-
-		GameProcessor.start(this.currentScene);
 		this.setTimer();
-		GameEventManager.publish(new EventMessage(EventMessageType.GameStarted, this.currentScene.gameObjects));
+		GameEventManager.publish(new EventMessage(EventMessageType.GameStarted, this.currentScene.rootGameObject.children));
 	}
 
 	public destroy(): void {
@@ -43,7 +40,7 @@ export class GameManager {
 			this.timerSubscription.unsubscribe();
 		}
 		this.timerSubscription = Timer.timerEvent.subscribe(() => {
-			GameProcessor.process(this.currentScene);
+			GameProcessor.process(this.currentScene.rootGameObject);
 			GameEventManager.publish(new EventMessage(EventMessageType.GameUpdate, this.currentScene));
 		});
 	}

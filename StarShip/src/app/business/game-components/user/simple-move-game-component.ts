@@ -7,6 +7,8 @@ import { VMath } from '../../common/v-math';
 @Exclude()
 export class SimpleMoveGameComponent extends GameComponent {
 
+	public name = SimpleMoveGameComponent.name;
+
 	@Expose()
 	public speed = null;
 

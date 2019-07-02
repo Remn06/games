@@ -7,7 +7,7 @@ import { GameObjectRenderInfo } from './game-object-render-info';
 export class HtmlRendererGameComponent extends GameComponent {
 
 	@Expose()
-	public name = 'HtmlRendererGameComponent';
+	public name = HtmlRendererGameComponent.name;
 
 	@Expose()
 	public backgroundImage: string;
@@ -18,10 +18,6 @@ export class HtmlRendererGameComponent extends GameComponent {
 	public gameObject: GameObject;
 
 	public renderInfo: GameObjectRenderInfo;
-
-	constructor() {
-		super();
-	}
 
 	start(): void {
 		this.renderInfo = GameObjectRenderInfo.fromGameObject(this.gameObject);

@@ -7,6 +7,8 @@ import { Timer } from '../../common/timer';
 @Exclude()
 export class TestOneComponent extends GameComponent {
 
+	public name = TestOneComponent.name;
+
 	public startX: number;
 	public stopX: number;
 	public speed: number;

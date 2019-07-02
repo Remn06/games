@@ -23,4 +23,11 @@ export class VMath {
 	public static toRad(angleDegrees: number): number {
 		return angleDegrees * Math.PI / 180;
 	}
+
+	public static randIntMaxIncluded(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min + 1) ) + min;
+	}
+	public static randIntMaxExcluded(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min) ) + min;
+	}
 }
