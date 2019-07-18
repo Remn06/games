@@ -42,7 +42,7 @@ export class HardcodedGameData {
 
 		const starShip = GameObjectFactory.createGameObject( rootGameObject,
 			'StarShip',
-			TransformFactory.createTransform(new Vector2(300, 300), 100, 100, 0),
+			TransformFactory.createTransform(new Vector2(300, 150), 100, 100, 0),
 			[
 				ComponentFactory.createComponent(HtmlRendererGameComponent, [
 					new NameValuePair('backgroundImage', 'url("assets/img/death-star.png")'),
@@ -75,7 +75,8 @@ export class HardcodedGameData {
 				ComponentFactory.createComponent(SparksComponent, [
 					new NameValuePair('active', true),
 					new NameValuePair('amount', 100),
-					new NameValuePair('speed', 1)
+					new NameValuePair('speed', 1),
+					new NameValuePair('gravity', new Vector2(-1, 1))
 				])
 			],
 			true
@@ -88,10 +89,10 @@ export class HardcodedGameData {
 		GameObjectFactory.createGameObject(
 			rootGameObject,
 			'Button 1',
-			TransformFactory.createTransform(new Vector2(80, 25), 150, 25, 0),
+			TransformFactory.createTransform(new Vector2(100, 25), 150, 25, 0),
 			[
 				ComponentFactory.createComponent(HtmlRendererGameComponent, [
-					new NameValuePair('cssStyle', 'color: #aaa; font-size: 20px, padding: 5px; text-align: center;'),
+					new NameValuePair('cssStyle', 'color: #FAA; font-size: 14px; padding-top: 5px; text-align: center; cursor: pointer'),
 					new NameValuePair('backgroundImage', 'url("assets/img/button-one.png")')
 				], true)
 			],

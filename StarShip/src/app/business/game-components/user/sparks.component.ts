@@ -16,6 +16,7 @@ interface SparkInfo {
 	color: number;
 	speed: number;
 	gameObject: GameObject;
+	gravitySpeed: number;
 }
 
 
@@ -29,6 +30,7 @@ export class SparksComponent extends GameComponent {
 
 	@Expose()
 	public amount = null;
+	public gravity: Vector2 = null;
 
 	private sparks: SparkInfo[] = [];
 
@@ -56,6 +58,7 @@ export class SparksComponent extends GameComponent {
 			this.createNewSpark(index);
 			return;
 		}
+
 		const spark = this.sparks[index];
 		spark.color = spark.color - this.speed;
 		if (spark.color < 0) {
@@ -64,8 +67,9 @@ export class SparksComponent extends GameComponent {
 			return;
 		}
 
+		spark.gravitySpeed += 2 * Timer.delta;
 		const deltaSpeed = spark.speed * Timer.delta;
-		const shift = VMath.multiply(spark.direction, deltaSpeed);
+		const shift = VMath.multiply(spark.direction.add(VMath.multiply(this.gravity, spark.gravitySpeed)), deltaSpeed);
 		spark.gameObject.transform.localPosition = spark.gameObject.transform.localPosition.add(shift);
 
 		const htmlComponent = spark.gameObject.getComponent(HtmlRendererGameComponent.name) as HtmlRendererGameComponent;
@@ -95,7 +99,8 @@ export class SparksComponent extends GameComponent {
 			direction,
 			color: 255,
 			gameObject,
-			speed: VMath.randIntMaxIncluded(10, 20)
+			speed: VMath.randIntMaxIncluded(10, 50),
+			gravitySpeed: 0
 		};
 	}
 }
