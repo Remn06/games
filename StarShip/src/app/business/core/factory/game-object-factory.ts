@@ -23,13 +23,13 @@ export class GameObjectFactory {
 		gameObject.components = components;
 		gameObject.transform.gameObject = gameObject;
 		gameObject.active = active;
+		gameObject.paused = false;
 		gameObject.text = text;
 
 		if (parent != null) {
 			GameObjectCollection.insert(gameObject, parent);
 		}
 
-		gameObject.start();
 		return gameObject;
 	}
 }

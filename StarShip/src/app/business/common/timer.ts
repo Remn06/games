@@ -21,8 +21,9 @@ export class Timer {
 
 	public static initialize() {
 		Timer.initialTimerValue = Timer.getTime();
-		Timer.lastTimerValue = Timer.initialTimerValue;
-		Timer.callTime = Timer.initialTimerValue;
+		// Timer.lastTimerValue = Timer.initialTimerValue;
+		// Timer.callTime = Timer.initialTimerValue;
+		Timer.start();
 		setInterval(() => { Timer.intervalCallback(); }, Timer.intervalValue);
 	}
 
@@ -54,6 +55,7 @@ export class Timer {
 	public static start(): void {
 		Timer.isStarted = true;
 		Timer.lastTimerValue = Timer.getTime();
+		Timer.callTime = Timer.initialTimerValue;
 	}
 
 	public static stop(): void {

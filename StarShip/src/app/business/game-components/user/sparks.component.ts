@@ -1,7 +1,7 @@
 import { GameComponent } from '../core/base/game-component';
 import { Timer } from '../../common/timer';
 import { Vector2 } from '../../common/vector2';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { VMath } from '../../common/v-math';
 import { GameObject } from '../../game-structure/game-object';
 import { GameObjectFactory } from '../../core/factory/game-object-factory';
@@ -30,7 +30,20 @@ export class SparksComponent extends GameComponent {
 
 	@Expose()
 	public amount = null;
+
+	@Expose()
+	@Type(() => Vector2)
 	public gravity: Vector2 = null;
+
+	@Expose()
+	@Type(() => Vector2)
+	public shift: Vector2 = null;
+
+	@Expose()
+	public gravityValue = 9.8;
+
+	@Expose()
+	public initScatter = 9.8;
 
 	private sparks: SparkInfo[] = [];
 
@@ -67,7 +80,7 @@ export class SparksComponent extends GameComponent {
 			return;
 		}
 
-		spark.gravitySpeed += 2 * Timer.delta;
+		spark.gravitySpeed += this.gravityValue * Timer.delta;
 		const deltaSpeed = spark.speed * Timer.delta;
 		const shift = VMath.multiply(spark.direction.add(VMath.multiply(this.gravity, spark.gravitySpeed)), deltaSpeed);
 		spark.gameObject.transform.localPosition = spark.gameObject.transform.localPosition.add(shift);
@@ -78,9 +91,10 @@ export class SparksComponent extends GameComponent {
 	}
 
 	private createNewSpark(index: number): void {
-		const direction =  VMath.rotate(Vector2.one, VMath.randIntMaxIncluded(0, 360)); // new Vector2(Math.random() - 0.5, Math.random() - 0.5);
-		// const position = new Vector2(this.gameObject.transform.position.x, this.gameObject.transform.position.y);
-		const position = this.gameObject.transform.position.add(VMath.multiply(direction, VMath.randIntMaxIncluded(0, 5)));
+		const direction =  VMath.rotate(Vector2.one, VMath.randIntMaxIncluded(0, 360));
+		let position = this.gameObject.transform.position.add(VMath.multiply(direction, VMath.randIntMaxIncluded(0, this.initScatter)));
+		position = position.add(this.shift);
+
 		const root = GameObjectCollection.root(this.gameObject);
 		const gameObject = GameObjectFactory.createGameObject(
 			root,

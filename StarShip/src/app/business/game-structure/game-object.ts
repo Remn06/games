@@ -31,6 +31,9 @@ export class GameObject {
 	@Expose()
 	public active: boolean;
 
+	@Expose()
+	public paused: boolean;
+
 	constructor() {
 	}
 
@@ -70,7 +73,7 @@ export class GameObject {
 	}
 
 	update() {
-		if (!this.active) {
+		if (!this.active || this.paused) {
 			return;
 		}
 

@@ -3,6 +3,7 @@ import { Vector2 } from '../common/vector2';
 import { GameObject } from './game-object';
 import { VMath } from '../common/v-math';
 import { TransformCalculateSystem } from '../core/transform-calculate-system';
+import { Rect } from '../common/rect';
 
 @Exclude()
 export class Transform {
@@ -88,5 +89,11 @@ export class Transform {
 	public set localRotation(value: number) {
 		this.localRotationValue = value;
 		TransformCalculateSystem.instance().registerForUpdate(this);
+	}
+
+	public toRect(): Rect {
+		const w2 = this.width / 2;
+		const h2 = this.height / 2;
+		return new Rect(this.position.x - w2, this.position.y - h2, this.width, this.height);
 	}
 }

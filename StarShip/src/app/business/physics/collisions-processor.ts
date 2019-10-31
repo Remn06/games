@@ -1,6 +1,6 @@
 import { GameObject } from '../game-structure/game-object';
 
-export class CollisionsPrcessor {
+export class CollisionsProcessor {
 	public static checkCollisions(rootGameObject: GameObject): void { /*
 		let intersectObjects: IntersectObject[] = [];
 		for(let i = 0; i < this.gameObjects.length; i++){

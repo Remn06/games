@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { GameObjectRenderInfo } from '../../business/game-components/core/html-renderer-game-component/game-object-render-info';
 import { Subscription } from 'rxjs';
 import { HtmlRendererService } from './html-renderer.service';
@@ -20,7 +20,9 @@ export class HtmlRendererComponent implements OnInit {
 
 	ngOnInit() {
 		this.subscribeToGameObjects();
-		GameManager.instance().load();
+		setTimeout(() => {
+			GameManager.instance().load();
+		}, 10);
 	}
 
 	ngOnDestroy(): void {

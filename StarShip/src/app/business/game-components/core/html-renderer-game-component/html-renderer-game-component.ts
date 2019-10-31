@@ -19,8 +19,17 @@ export class HtmlRendererGameComponent extends GameComponent {
 
 	public renderInfo: GameObjectRenderInfo;
 
+	private additionalCss = '';
+	private image: HTMLImageElement;
+
 	start(): void {
 		this.renderInfo = GameObjectRenderInfo.fromGameObject(this.gameObject);
+
+		// todo this is a pre-load of the images, but it should be moved into the initial game loading procedure with progress bar.
+		if (this.backgroundImage != null) {
+			this.image = new Image();
+			this.image.src = this.backgroundImage;
+		}
 	}
 
 	draw(): void {
@@ -29,15 +38,20 @@ export class HtmlRendererGameComponent extends GameComponent {
 		this.renderInfo.left = this.gameObject.transform.position.x - (this.gameObject.transform.width / 2);
 		this.renderInfo.top = this.gameObject.transform.position.y - (this.gameObject.transform.height / 2);
 		this.renderInfo.rotation = this.gameObject.transform.rotation;
-		this.renderInfo.backgroundImage = this.backgroundImage;
+		this.renderInfo.backgroundImage = this.backgroundImage != null ? 'url("' + this.backgroundImage + '")' : null;
 		this.renderInfo.text = this.gameObject.text;
-		this.renderInfo.cssStyle = this.cssStyle;
+		this.renderInfo.cssStyle = this.cssStyle + ' ' + this.additionalCss;
+		this.additionalCss = ''; // cleanUp;
 	}
 
 	update(): void {
 	}
 
 	destroy(): void {
+	}
+
+	public addAdditionalCss(css: string): void {
+		this.additionalCss += css;
 	}
 }
 

@@ -1,4 +1,4 @@
-import { CollisionsPrcessor } from './physics/collisions-prcessor';
+import { CollisionsProcessor } from './physics/collisions-processor';
 import { TransformCalculateSystem } from './core/transform-calculate-system';
 import { Input } from './input/input';
 import { GameObject } from './game-structure/game-object';
@@ -12,7 +12,7 @@ export class GameProcessor {
 
 		TransformCalculateSystem.instance().update();
 
-		CollisionsPrcessor.checkCollisions(rootGameObject);
+		CollisionsProcessor.checkCollisions(rootGameObject);
 
 		rootGameObject.draw();
 

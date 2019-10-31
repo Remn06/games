@@ -22,6 +22,14 @@ export class GameObjectCollection {
 		}
 		gameObject.parent.children.splice(index, 1);
 		gameObject.parent = null;
+		gameObject.destroy();
+	}
+
+	public static removeChildren(gameObject: GameObject): void {
+		const children = gameObject.children.slice();
+		children.forEach((child) => {
+			GameObjectCollection.remove(child);
+		});
 	}
 
 	public static switch(objectA: GameObject, objectB: GameObject): void {
@@ -49,5 +57,19 @@ export class GameObjectCollection {
 		gameObject.parent = parent;
 		const index = insertAfter == null ? -1 : parent.children.indexOf(gameObject);
 		parent.children.splice(index === -1 ? parent.children.length : index, 0, gameObject);
+		gameObject.start();
+	}
+
+	public static findDescendantByName(name: string, gameObject: GameObject): GameObject {
+		for (const child of gameObject.children) {
+			if (child.name === name) {
+				return child;
+			}
+			const grand = GameObjectCollection.findDescendantByName(name, child);
+			if (grand != null) {
+				return grand;
+			}
+		}
+		return null;
 	}
 }
