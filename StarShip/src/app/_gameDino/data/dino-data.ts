@@ -49,10 +49,7 @@ export class DinoData {
 			'DynamicObjects',
 			TransformFactory.createChildTransform(rootGameObject.transform, Vector2.zero, 0, 0, 0),
 			[
-				ComponentFactory.createComponent(HtmlRendererGameComponent, [
-					new NameValuePair('backgroundImage', `assets/_gameDino/img/cloud.png`)
-				], true),
-				ComponentFactory.createComponent(DinoChangerGameComponent, [], true),
+				ComponentFactory.createComponent(DinoChangerGameComponent, [], true)
 			],
 			true
 		);
