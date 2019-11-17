@@ -20,9 +20,6 @@ export class HtmlRendererComponent implements OnInit {
 
 	ngOnInit() {
 		this.subscribeToGameObjects();
-		setTimeout(() => {
-			GameManager.instance().load();
-		}, 10);
 	}
 
 	ngOnDestroy(): void {

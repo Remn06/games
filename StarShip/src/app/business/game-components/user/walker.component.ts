@@ -4,7 +4,7 @@ import { Rect } from '../../common/rect';
 import { Vector2 } from '../../common/vector2';
 import { VMath } from '../../common/v-math';
 import { Timer } from '../../common/timer';
-import { Angle } from '../../common/Angle';
+import { Angle } from '../../common/angle';
 
 enum WalkerOperation {
 	None = 'None',

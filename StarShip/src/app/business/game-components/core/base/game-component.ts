@@ -11,19 +11,11 @@ export abstract class GameComponent {
 
 	gameObject: GameObject;
 
-	start(): void {
-		throw new Error('Not implemented');
-	}
+	public abstract start();
 
-	draw(): void {
-		throw new Error('Not implemented');
-	}
+	public abstract draw();
 
-	update(): void {
-		throw new Error('Not implemented');
-	}
+	public abstract update();
 
-	destroy(): void {
-		throw new Error('Not implemented');
-	}
+	public abstract destroy();
 }
