@@ -33,14 +33,14 @@ export class HtmlRendererService implements OnDestroy {
 
 		const allObjects = this.getAllGameObjects(gameScene.rootGameObject.children);
 
-		const infos = allObjects.map((go) => {
+		const renderInfos = allObjects.reduce((infos, go) => {
 			const renderer = go.getComponent('HtmlRendererGameComponent') as HtmlRendererGameComponent;
-			if (renderer == null) {
-				return;
+			if (renderer != null) {
+				infos.push(renderer.renderInfo);
 			}
-			return renderer.renderInfo;
-		});
-		this.subject.next(infos);
+			return infos;
+		}, []);
+		this.subject.next(renderInfos);
 	}
 
 	private getAllGameObjects(gameObjects: GameObject[]): GameObject[] {
