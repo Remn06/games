@@ -1,8 +1,8 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { GameObject } from '../../business/game-structure/game-object';
-import { GameObjectCollection } from '../../business/core/game-object-collection';
-import { Input } from '../../business/input/input';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { GameObject } from '../../../business/game-structure/game-object';
+import { GameObjectCollection } from '../../../business/core/game-object-collection';
+import { Input } from '../../../business/input/input';
 import { DinoJumpGameComponent } from './dino-jump-game-component';
 
 @Exclude()

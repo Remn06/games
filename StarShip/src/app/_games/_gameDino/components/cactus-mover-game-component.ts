@@ -1,19 +1,19 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { GameObject } from '../../business/game-structure/game-object';
-import { GameObjectFactory } from '../../business/core/factory/game-object-factory';
-import { TransformFactory } from '../../business/core/factory/transform-factory';
-import { Vector2 } from '../../business/common/vector2';
-import { ComponentFactory } from '../../business/core/factory/component-factory';
-import { HtmlRendererGameComponent } from '../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
-import { NameValuePair } from '../../business/common/name-value-pair';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { GameObject } from '../../../business/game-structure/game-object';
+import { GameObjectFactory } from '../../../business/core/factory/game-object-factory';
+import { TransformFactory } from '../../../business/core/factory/transform-factory';
+import { Vector2 } from '../../../business/common/vector2';
+import { ComponentFactory } from '../../../business/core/factory/component-factory';
+import { HtmlRendererGameComponent } from '../../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
+import { NameValuePair } from '../../../business/common/name-value-pair';
 import { GroundRemoveOutOfScreenComponent } from './ground-remove-out-of-screen-component';
-import { Timer } from '../../business/common/timer';
-import { Screen } from '../../business/screen/screen';
-import { AnimateGameComponent } from '../../business/game-components/core/animate-game-component/animate-game-component';
-import { VMath } from '../../business/common/v-math';
-import { GameObjectCollection } from '../../business/core/game-object-collection';
-import { SoundPlayerGameComponent } from '../../business/game-components/core/sound-player-game-component';
+import { Timer } from '../../../business/common/timer';
+import { Screen } from '../../../business/screen/screen';
+import { AnimateGameComponent } from '../../../business/game-components/core/animate-game-component/animate-game-component';
+import { VMath } from '../../../business/common/v-math';
+import { GameObjectCollection } from '../../../business/core/game-object-collection';
+import { SoundPlayerGameComponent } from '../../../business/game-components/core/sound-player-game-component';
 
 class IObstacleInfo {
 	name: string;

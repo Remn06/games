@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { Timer } from '../../business/common/timer';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { Timer } from '../../../business/common/timer';
 
 @Exclude()
 export class ScoreGameComponent extends GameComponent  {

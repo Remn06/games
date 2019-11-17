@@ -1,6 +1,6 @@
-import { GameComponent } from '../../business/game-components/core/base/game-component';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
 import { Exclude, Expose } from 'class-transformer';
-import { GameObjectCollection } from '../../business/core/game-object-collection';
+import { GameObjectCollection } from '../../../business/core/game-object-collection';
 
 @Exclude()
 export class GroundRemoveOutOfScreenComponent extends GameComponent  {

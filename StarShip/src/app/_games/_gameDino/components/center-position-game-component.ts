@@ -1,13 +1,13 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { Input } from '../../business/input/input';
-import { GameObjectCollection } from '../../business/core/game-object-collection';
-import { MouseInputEvent } from '../../business/input/dto/mouse-input-event';
-import { Rect } from '../../business/common/rect';
-import { Screen } from '../../business/screen/screen';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { Input } from '../../../business/input/input';
+import { GameObjectCollection } from '../../../business/core/game-object-collection';
+import { MouseInputEvent } from '../../../business/input/dto/mouse-input-event';
+import { Rect } from '../../../business/common/rect';
+import { Screen } from '../../../business/screen/screen';
 import { CactusMoverGameComponent } from './cactus-mover-game-component';
-import { Vector2 } from '../../business/common/vector2';
-import { VMath } from '../../business/common/v-math';
+import { Vector2 } from '../../../business/common/vector2';
+import { VMath } from '../../../business/common/v-math';
 
 @Exclude()
 export class CenterPositionGameComponent extends GameComponent  {

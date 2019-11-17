@@ -1,9 +1,9 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { Input } from '../../business/input/input';
-import { Vector2 } from '../../business/common/vector2';
-import { Timer } from '../../business/common/timer';
-import { SoundPlayerGameComponent } from '../../business/game-components/core/sound-player-game-component';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { Input } from '../../../business/input/input';
+import { Vector2 } from '../../../business/common/vector2';
+import { Timer } from '../../../business/common/timer';
+import { SoundPlayerGameComponent } from '../../../business/game-components/core/sound-player-game-component';
 
 @Exclude()
 export class DinoJumpGameComponent extends GameComponent  {

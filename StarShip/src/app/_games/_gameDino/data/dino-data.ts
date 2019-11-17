@@ -1,18 +1,18 @@
-import { GameObject } from '../../business/game-structure/game-object';
-import { GameObjectFactory } from '../../business/core/factory/game-object-factory';
-import { TransformFactory } from '../../business/core/factory/transform-factory';
-import { Vector2 } from '../../business/common/vector2';
-import { ComponentFactory } from '../../business/core/factory/component-factory';
-import { HtmlRendererGameComponent } from '../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
-import { NameValuePair } from '../../business/common/name-value-pair';
+import { GameObject } from '../../../business/game-structure/game-object';
+import { GameObjectFactory } from '../../../business/core/factory/game-object-factory';
+import { TransformFactory } from '../../../business/core/factory/transform-factory';
+import { Vector2 } from '../../../business/common/vector2';
+import { ComponentFactory } from '../../../business/core/factory/component-factory';
+import { HtmlRendererGameComponent } from '../../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
+import { NameValuePair } from '../../../business/common/name-value-pair';
 import { StartButtonGameComponent } from '../components/start-button-game-component';
 import { CenterPositionGameComponent } from '../components/center-position-game-component';
 import { DinoChangerGameComponent } from '../components/dino-changer-game-component';
 import { ScoreGameComponent } from '../components/score-game-component';
 import { CloudMoverGameComponent } from '../components/cloud-mover-game-component';
-import { AnimateGameComponent } from '../../business/game-components/core/animate-game-component/animate-game-component';
+import { AnimateGameComponent } from '../../../business/game-components/core/animate-game-component/animate-game-component';
 import { DinoJumpGameComponent } from '../components/dino-jump-game-component';
-import { SoundPlayerGameComponent } from '../../business/game-components/core/sound-player-game-component';
+import { SoundPlayerGameComponent } from '../../../business/game-components/core/sound-player-game-component';
 import { GroundMoverComponent } from '../components/ground-mover-component';
 import { CactusMoverGameComponent } from '../components/cactus-mover-game-component';
 

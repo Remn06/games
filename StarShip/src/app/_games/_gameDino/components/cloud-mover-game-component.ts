@@ -1,9 +1,9 @@
 import { Exclude, Expose } from 'class-transformer';
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { Vector2 } from '../../business/common/vector2';
-import { Screen } from '../../business/screen/screen';
-import { VMath } from '../../business/common/v-math';
-import { Timer } from '../../business/common/timer';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { Vector2 } from '../../../business/common/vector2';
+import { Screen } from '../../../business/screen/screen';
+import { VMath } from '../../../business/common/v-math';
+import { Timer } from '../../../business/common/timer';
 
 @Exclude()
 export class CloudMoverGameComponent extends GameComponent  {

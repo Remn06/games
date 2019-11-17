@@ -13,7 +13,7 @@ import { ShowHideGameObjectComponent } from '../game-components/user/show-hide-g
 import { Rect } from '../common/rect';
 import { WalkerComponent } from '../game-components/user/walker.component';
 import { VMath } from '../common/v-math';
-import { DinoData } from '../../_gameDino/data/dino-data';
+import { ImpossibleDinoData } from '../../_games/impossible-dino/impossible-dino-data';
 
 
 export class HardcodedGameData {
@@ -27,7 +27,7 @@ export class HardcodedGameData {
 	}
 
 	private static getScene(): GameScene {
-		const rootGameObject = DinoData.getData();
+		const rootGameObject = ImpossibleDinoData.getData();
 		return new GameScene('Main Scene', rootGameObject);
 	}
 
