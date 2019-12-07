@@ -14,6 +14,7 @@ import { Rect } from '../common/rect';
 import { WalkerComponent } from '../game-components/user/walker.component';
 import { VMath } from '../common/v-math';
 import { ImpossibleDinoData } from '../../_games/impossible-dino/impossible-dino-data';
+import { JiraData } from '../../_games/_enviance/data/jira-data';
 
 
 export class HardcodedGameData {
@@ -27,7 +28,7 @@ export class HardcodedGameData {
 	}
 
 	private static getScene(): GameScene {
-		const rootGameObject = ImpossibleDinoData.getData();
+		const rootGameObject = JiraData.getData();
 		return new GameScene('Main Scene', rootGameObject);
 	}
 
