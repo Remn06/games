@@ -9,7 +9,7 @@ import { HtmlRendererGameComponent } from '../../../business/game-components/cor
 import { NameValuePair } from '../../../business/common/name-value-pair';
 import { GroundRemoveOutOfScreenComponent } from './ground-remove-out-of-screen-component';
 import { Timer } from '../../../business/common/timer';
-import { Screen } from '../../../business/screen/screen';
+import { GameScreen } from '../../../business/screen/game-screen';
 import { AnimateGameComponent } from '../../../business/game-components/core/animate-game-component/animate-game-component';
 import { VMath } from '../../../business/common/v-math';
 import { GameObjectCollection } from '../../../business/core/game-object-collection';
@@ -90,7 +90,7 @@ export class CactusMoverGameComponent extends GameComponent  {
 	public update(): void {
 		if (this.nextTime < Timer.getTime()) {
 			const obstacleInfo = obstacleInfos[VMath.randIntMaxExcluded(0, obstacleInfos.length)];
-			const x = Screen.getDefaultScreen().width + obstacleInfo.width;
+			const x = GameScreen.getDefaultScreen().width + obstacleInfo.width;
 			this.createObstacleGameObject(obstacleInfo, x);
 			this.setNextTime();
 		}

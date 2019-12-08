@@ -19,8 +19,9 @@ export class AnimateGameComponent extends GameComponent {
 	public slidesInARow: number;
 	@Expose()
 	public slidesCount: number;
-
+	@Expose()
 	public animationSpeed: number;
+
 	public repeat: boolean;
 	public animationFinished: () => void;
 
@@ -67,6 +68,7 @@ export class AnimateGameComponent extends GameComponent {
 		const timeToChange = 1 / this.animationSpeed;
 
 		this.counter += Timer.delta;
+
 		if (this.counter < timeToChange) {
 			return;
 		}

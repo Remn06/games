@@ -9,7 +9,7 @@ import { HtmlRendererGameComponent } from '../../../business/game-components/cor
 import { NameValuePair } from '../../../business/common/name-value-pair';
 import { GroundRemoveOutOfScreenComponent } from './ground-remove-out-of-screen-component';
 import { Timer } from '../../../business/common/timer';
-import { Screen } from '../../../business/screen/screen';
+import { GameScreen } from '../../../business/screen/game-screen';
 
 @Exclude()
 export class GroundMoverComponent extends GameComponent  {
@@ -23,7 +23,7 @@ export class GroundMoverComponent extends GameComponent  {
 	public margin: number;
 
 	public start(): void {
-		const width = Screen.getDefaultScreen().width;
+		const width = GameScreen.getDefaultScreen().width;
 		let right = 0;
 		while (right < width + this.margin) {
 			const groundObject = this.createGroundGameObject(right);
@@ -49,7 +49,7 @@ export class GroundMoverComponent extends GameComponent  {
 		const lastObjectTransform = this.gameObject.children[this.gameObject.children.length - 1].transform;
 		const lastObjectRight = lastObjectTransform.localPosition.x + lastObjectTransform.width / 2;
 
-		if (lastObjectRight < Screen.getDefaultScreen().width + this.margin) {
+		if (lastObjectRight < GameScreen.getDefaultScreen().width + this.margin) {
 			this.createGroundGameObject(lastObjectRight);
 		}
 	}

@@ -2,7 +2,7 @@ import { Component, HostListener, Inject, Injectable, OnInit } from '@angular/co
 import { DOCUMENT } from '@angular/common';
 import { Input } from '../../business/input/input';
 import { WebBrowserInputAdapter } from '../../business/input/adapters/web-browser-input-adapter';
-import { Screen } from '../../business/screen/screen';
+import { GameScreen } from '../../business/screen/game-screen';
 
 @Component({
 	selector: 'app-root',
@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
 	onResize() {
 		const margin = 100;
 
-		const screen = Screen.getDefaultScreen();
+		const screen = GameScreen.getDefaultScreen();
 		screen.width = window.innerWidth - margin;
 		screen.height = window.innerHeight - margin;
 
