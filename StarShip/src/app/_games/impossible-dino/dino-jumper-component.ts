@@ -25,8 +25,10 @@ export class DinoJumperComponent extends GameComponent {
 	}
 
 	update(): void {
-		const a = this.gameObject.transform
+		const a = this.gameObject.transform;
 	}
 
+	destroy(): void {
+	}
 
 }

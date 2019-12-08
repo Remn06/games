@@ -1,5 +1,5 @@
 import { GameComponent } from '../../../business/game-components/core/base/game-component';
-import { JiraIssueFacade } from '../business/jira/jira-issue-facade';
+// import { JiraIssueFacade } from '../business/jira/jira-issue-facade';
 
 export class ServiceWorkerGameComponent extends GameComponent  {
 
