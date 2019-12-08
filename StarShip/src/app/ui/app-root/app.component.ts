@@ -2,7 +2,10 @@ import { Component, HostListener, Inject, Injectable, OnInit } from '@angular/co
 import { DOCUMENT } from '@angular/common';
 import { Input } from '../../business/input/input';
 import { WebBrowserInputAdapter } from '../../business/input/adapters/web-browser-input-adapter';
-import { GameScreen } from '../../business/screen/game-screen';
+import { Screen } from '../../business/screen/screen';
+import { GameManager } from '../../business/game-manager';
+import { RestClient } from '../../business/core/http/rest-client';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
 	selector: 'app-root',
@@ -15,14 +18,14 @@ export class AppComponent implements OnInit {
 	width = '100px';
 	height = '100px';
 
-	constructor(@Inject(DOCUMENT) private document: Document) {
+	constructor(@Inject(DOCUMENT) private document: Document, private http: HttpClient) {
 	}
 
 	@HostListener('window:resize', [])
 	onResize() {
-		const margin = 100;
+		const margin = 0;
 
-		const screen = GameScreen.getDefaultScreen();
+		const screen = Screen.getDefaultScreen();
 		screen.width = window.innerWidth - margin;
 		screen.height = window.innerHeight - margin;
 
@@ -35,5 +38,9 @@ export class AppComponent implements OnInit {
 			this.onResize();
 		}, 0);
 		Input.setAdapter(new WebBrowserInputAdapter(this.document));
+		RestClient.httpClient = this.http;
+		setTimeout(() => {
+			GameManager.instance().load();
+		}, 10);
 	}
 }
