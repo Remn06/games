@@ -1,9 +1,9 @@
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { Vector2 } from '../../business/common/vector2';
-import { Timer } from '../../business/common/timer';
-import { GameScreen } from '../../business/screen/game-screen';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { Vector2 } from '../../../business/common/vector2';
+import { Timer } from '../../../business/common/timer';
+import { GameScreen } from '../../../business/screen/game-screen';
 import { Expose } from 'class-transformer';
-import { VMath } from '../../business/common/v-math';
+import { VMath } from '../../../business/common/v-math';
 
 export class CloudShifterComponent extends GameComponent {
 	name: string = CloudShifterComponent.name;

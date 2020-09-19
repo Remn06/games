@@ -13,7 +13,7 @@ import { ShowHideGameObjectComponent } from '../game-components/user/show-hide-g
 import { Rect } from '../common/rect';
 import { WalkerComponent } from '../game-components/user/walker.component';
 import { VMath } from '../common/v-math';
-import { ImpossibleDinoData } from '../../_games/impossible-dino/impossible-dino-data';
+import { ImpossibleDinoData } from '../../_games/impossible-dino/data/impossible-dino-data';
 // import { JiraData } from '../../_games/_enviance/data/jira-data';
 
 

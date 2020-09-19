@@ -1,14 +1,18 @@
-import { GameObject } from '../../business/game-structure/game-object';
-import { GameObjectFactory } from '../../business/core/factory/game-object-factory';
-import { TransformFactory } from '../../business/core/factory/transform-factory';
-import { Vector2 } from '../../business/common/vector2';
-import { ComponentFactory } from '../../business/core/factory/component-factory';
-import { HtmlRendererGameComponent } from '../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
-import { NameValuePair } from '../../business/common/name-value-pair';
-import { CloudShifterComponent } from './cloud-shifter-component';
-import { AnimateGameComponent } from '../../business/game-components/core/animate-game-component/animate-game-component';
-import { GroundShifterComponent } from './ground-shifter-component';
-import { DinoJumperComponent } from './dino-jumper-component';
+import { GameObject } from '../../../business/game-structure/game-object';
+import { GameObjectFactory } from '../../../business/core/factory/game-object-factory';
+import { TransformFactory } from '../../../business/core/factory/transform-factory';
+import { Vector2 } from '../../../business/common/vector2';
+import { ComponentFactory } from '../../../business/core/factory/component-factory';
+import {
+	HtmlRendererGameComponent
+} from '../../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
+import { NameValuePair } from '../../../business/common/name-value-pair';
+import { CloudShifterComponent } from '../components/cloud-shifter-component';
+import { AnimateGameComponent } from '../../../business/game-components/core/animate-game-component/animate-game-component';
+import { GroundShifterComponent } from '../components/ground-shifter-component';
+import { DinoJumperComponent } from '../components/dino-jumper-component';
+import { GeometryComponent } from '../components/oscil/geometry-component';
+import { CactiProducerComponent } from '../components/cacti-producer-component';
 
 export class ImpossibleDinoData {
 	public static getData(): GameObject {
@@ -21,6 +25,20 @@ export class ImpossibleDinoData {
 			],
 			true
 		);
+
+		/*const background = GameObjectFactory.createGameObject(
+			rootGameObject,
+			'Background',
+			TransformFactory.createTransform(new Vector2(700, 400), 1024, 768, 0),
+			[
+				ComponentFactory.createComponent(HtmlRendererGameComponent, [
+					new NameValuePair('backgroundImage', 'assets/_games/impossible-dino/img/oscilograph-background.png'),
+					new NameValuePair('cssStyle', ''),
+				], true),
+				ComponentFactory.createComponent(GeometryComponent, [])
+			],
+			true
+		);*/
 
 		const cloud = GameObjectFactory.createGameObject(
 			rootGameObject,
@@ -74,10 +92,29 @@ export class ImpossibleDinoData {
 			],
 			true
 		);
-		const dino = GameObjectFactory.createGameObject(
+
+		const groundHolder = GameObjectFactory.createGameObject(
 			rootGameObject,
+			'GroundHolder',
+			TransformFactory.createTransform(new Vector2(0, 269), 8, 8, 0),
+			[
+				ComponentFactory.createComponent(GroundShifterComponent, [
+					new NameValuePair('speed', 200),
+					new NameValuePair('margin', 100),
+				]),
+				ComponentFactory.createComponent(CactiProducerComponent, [
+					new NameValuePair('frequency', 1500),
+					new NameValuePair('shiftIntervalFrom', 500),
+					new NameValuePair('shiftIntervalTo', 1000)
+				], true)
+			],
+			true
+		);
+
+		const dino = GameObjectFactory.createGameObject(
+			groundHolder,
 			'Dino',
-			TransformFactory.createTransform(new Vector2(50, 250), 40, 43, 0),
+			TransformFactory.createChildTransform(groundHolder.transform, new Vector2(50, -19), 40, 43, 0),
 			[
 				ComponentFactory.createComponent(HtmlRendererGameComponent, [
 					new NameValuePair('backgroundImage', 'assets/games/impossibleDino/img/dino-step-run.png'),
@@ -91,23 +128,12 @@ export class ImpossibleDinoData {
 					new NameValuePair('animationSpeed', 12)
 				]),
 				ComponentFactory.createComponent(DinoJumperComponent, [
-					new NameValuePair('speed', 75)
+					new NameValuePair('durationOfJump', 0.32), // 0.25
+					new NameValuePair('jumpHeight', 85), // 85
 				])
 			],
 			true
-		);
 
-		const groundHolder = GameObjectFactory.createGameObject(
-			rootGameObject,
-			'GroundHolder',
-			TransformFactory.createTransform(new Vector2(0, 269), 8, 8, 0),
-			[
-				ComponentFactory.createComponent(GroundShifterComponent, [
-					new NameValuePair('speed', 200),
-					new NameValuePair('margin', 100),
-				])
-			],
-			true
 		);
 
 		return rootGameObject;

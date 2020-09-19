@@ -1,16 +1,16 @@
-import { GameComponent } from '../../business/game-components/core/base/game-component';
-import { Vector2 } from '../../business/common/vector2';
-import { Timer } from '../../business/common/timer';
-import { GameScreen } from '../../business/screen/game-screen';
+import { GameComponent } from '../../../business/game-components/core/base/game-component';
+import { Vector2 } from '../../../business/common/vector2';
+import { Timer } from '../../../business/common/timer';
+import { GameScreen } from '../../../business/screen/game-screen';
 import { Expose } from 'class-transformer';
-import { VMath } from '../../business/common/v-math';
-import { GameObject } from '../../business/game-structure/game-object';
-import { GameObjectFactory } from '../../business/core/factory/game-object-factory';
-import { TransformFactory } from '../../business/core/factory/transform-factory';
-import { ComponentFactory } from '../../business/core/factory/component-factory';
-import { HtmlRendererGameComponent } from '../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
-import { NameValuePair } from '../../business/common/name-value-pair';
-import { GameObjectCollection } from '../../business/core/game-object-collection';
+import { VMath } from '../../../business/common/v-math';
+import { GameObject } from '../../../business/game-structure/game-object';
+import { GameObjectFactory } from '../../../business/core/factory/game-object-factory';
+import { TransformFactory } from '../../../business/core/factory/transform-factory';
+import { ComponentFactory } from '../../../business/core/factory/component-factory';
+import { HtmlRendererGameComponent } from '../../../business/game-components/core/html-renderer-game-component/html-renderer-game-component';
+import { NameValuePair } from '../../../business/common/name-value-pair';
+import { GameObjectCollection } from '../../../business/core/game-object-collection';
 
 export class GroundShifterComponent extends GameComponent {
 	name: string = GroundShifterComponent.name;
@@ -33,10 +33,13 @@ export class GroundShifterComponent extends GameComponent {
 	update(): void {
 		const children = this.gameObject.children.slice();
 		for (let i = 0; i < children.length; i++) {
+			if (children[i].name === 'Dino') {
+				continue;
+			}
 			this.shiftGround(children[i]);
 		}
 
-		if (this.gameObject.children.length === 0){
+		if (this.gameObject.children.length === 0) {
 			this.createGroundGameObject(this.groundWidth / 2);
 		}
 		while (this.gameObject.children[this.gameObject.children.length - 1].transform.toRect().right < GameScreen.getDefaultScreen().width) {
