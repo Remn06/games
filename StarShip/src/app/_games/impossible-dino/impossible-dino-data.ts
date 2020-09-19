@@ -28,7 +28,7 @@ export class ImpossibleDinoData {
 			TransformFactory.createTransform(new Vector2(400, 170), 46, 13, 0),
 			[
 				ComponentFactory.createComponent(HtmlRendererGameComponent, [
-					new NameValuePair('backgroundImage', 'assets/_games/impossible-dino/img/cloud.png'),
+					new NameValuePair('backgroundImage', 'assets/games/impossibleDino/img/cloud.png'),
 					new NameValuePair('cssStyle', ''),
 				], true),
 				ComponentFactory.createComponent(CloudShifterComponent, [
@@ -46,7 +46,7 @@ export class ImpossibleDinoData {
 			TransformFactory.createTransform(new Vector2(500, 150), 46, 13, 0),
 			[
 				ComponentFactory.createComponent(HtmlRendererGameComponent, [
-					new NameValuePair('backgroundImage', 'assets/_games/impossible-dino/img/cloud.png'),
+					new NameValuePair('backgroundImage', 'assets/games/impossibleDino/img/cloud.png'),
 					new NameValuePair('cssStyle', '')
 				], true),
 				ComponentFactory.createComponent(CloudShifterComponent, [
@@ -63,7 +63,7 @@ export class ImpossibleDinoData {
 			TransformFactory.createTransform(new Vector2(700, 130), 46, 13, 0),
 			[
 				ComponentFactory.createComponent(HtmlRendererGameComponent, [
-					new NameValuePair('backgroundImage', 'assets/_games/impossible-dino/img/cloud.png'),
+					new NameValuePair('backgroundImage', 'assets/games/impossibleDino/img/cloud.png'),
 					new NameValuePair('cssStyle', '')
 				], true),
 				ComponentFactory.createComponent(CloudShifterComponent, [
@@ -80,7 +80,7 @@ export class ImpossibleDinoData {
 			TransformFactory.createTransform(new Vector2(50, 250), 40, 43, 0),
 			[
 				ComponentFactory.createComponent(HtmlRendererGameComponent, [
-					new NameValuePair('backgroundImage', 'assets/_games/impossible-dino/img/dino-step-run.png'),
+					new NameValuePair('backgroundImage', 'assets/games/impossibleDino/img/dino-step-run.png'),
 					new NameValuePair('cssStyle', '')
 				], true),
 				ComponentFactory.createComponent(AnimateGameComponent, [
